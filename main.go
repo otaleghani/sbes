@@ -50,5 +50,5 @@ func sendEmail(smtpHost string, smtpPort int, username, password, from string, t
 // }
 
 func main() {
-  repl()
+	repl()
 }
