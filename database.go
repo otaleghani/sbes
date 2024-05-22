@@ -6,8 +6,16 @@ import (
   "errors"
 )
 
-// To do
-// Get account
+type Config struct {
+  Username string `json:"username"`
+  Password string `json:"password"`
+	SmtpHost string `json:"smtpHost"`
+	SmtpPort int `json:"smtpPort"`
+}
+
+type Database struct {
+	Accounts map[string]Config `json:"accounts"`
+}
 
 func getPaths() (string, string, error) {
 	homePath, err := os.UserHomeDir()
@@ -83,20 +91,20 @@ func AuthAdd(conf Config) error {
 
   err = writeDatabase(Database)
   if err != nil {
-    return err
+   return err
   }
   return nil
 }
 
 func AuthDelete(username string) error {
-  Database, err := openDatabase()
+  Db, err := openDatabase()
   if err != nil {
     return err
   }
 
-  delete(Database.Accounts, username)
+  delete(Db.Accounts, username)
 
-  err = writeDatabase(Database)
+  err = writeDatabase(Db)
   if err != nil {
     return err
   }
