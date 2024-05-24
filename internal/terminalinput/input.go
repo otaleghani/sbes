@@ -70,7 +70,7 @@ func ReadInput(prompt string) string {
 		}
 	}
 
-  fmt.Print("\r \r")
+	fmt.Print("\r \r")
 
 	return string(input)
 }

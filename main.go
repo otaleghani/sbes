@@ -1,7 +1,9 @@
 package main
 
-import ()
+import (
+	"github.com/otaleghani/sbes/internal/repl"
+)
 
 func main() {
-	repl()
+	repl.Start()
 }

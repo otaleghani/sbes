@@ -14,11 +14,11 @@ import (
 // redirect URL, the scopes of access required, and the OAuth2 provider's endpoint.
 var (
 	oauthConfig = &oauth2.Config{
-		RedirectURL:  "http://localhost:8080/oauth2callback",
-		Scopes:       []string{"https://mail.google.com/"},
-		Endpoint:     google.Endpoint,
+		RedirectURL: "http://localhost:8080/oauth2callback",
+		Scopes:      []string{"https://mail.google.com/"},
+		Endpoint:    google.Endpoint,
 	}
-	oauthStateString = "state-token" // State token to protect against CSRF
+	oauthStateString = "state-token"            // State token to protect against CSRF
 	tokenChan        = make(chan *oauth2.Token) // Channel to receive OAuth2 tokens
 )
 
