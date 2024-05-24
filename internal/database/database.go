@@ -33,7 +33,7 @@ type Database struct {
 	Accounts      map[string]Account     `json:"accounts"`
 	OAuth_tokens  map[string]OAuthToken  `json:"oauths_tokens"`
 	OAuth_clients map[string]OAuthClient `json:"oauths_clients"`
-	Recipients    map[string][]string    `json:"recipients"`
+	Mailing_lists map[string][]string    `json:"mailing_lists"`
 	Messages      map[string]Message     `json:"messages"`
 }
 
@@ -77,7 +77,7 @@ func openDatabase() (Database, error) {
 		Accounts:      make(map[string]Account),
 		OAuth_tokens:  make(map[string]OAuthToken),
 		OAuth_clients: make(map[string]OAuthClient),
-		Recipients:    make(map[string][]string),
+		Mailing_lists:    make(map[string][]string),
 		Messages:      make(map[string]Message),
 	}
 	if err = json.Unmarshal(data, &Db); err != nil {

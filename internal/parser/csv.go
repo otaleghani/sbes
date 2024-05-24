@@ -2,9 +2,9 @@ package parser
 
 import (
 	"encoding/csv"
+	"fmt"
 	"os"
-  "fmt"
-  "strings"
+	"strings"
 )
 
 func Csv(path string, columnNumber int) ([]string, error) {
@@ -30,9 +30,9 @@ func Csv(path string, columnNumber int) ([]string, error) {
 			return nil, fmt.Errorf("column number %d out of range", columnNumber)
 		}
 
-    if !strings.Contains(record[columnNumber], "@") {
-      continue
-    }
+		if !strings.Contains(record[columnNumber], "@") {
+			continue
+		}
 		columnData = append(columnData, record[columnNumber])
 	}
 

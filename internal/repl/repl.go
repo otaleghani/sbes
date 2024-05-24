@@ -43,15 +43,15 @@ func Start() {
 		item := strings.ToLower(os.Args[2])
 		switch item {
 		case "account":
-			fmt.Println("list account")
+      cmdList_Accounts()
 		case "oauth-client":
-			fmt.Println("list oauth client")
+      cmdList_OAuthClients()
 		case "oauth-token":
-			fmt.Println("list oauth token")
+      cmdList_OAuthTokens()
 		case "mailing-list":
-			fmt.Println("list mailing-list")
+      cmdList_MailingLists()
 		case "message":
-			fmt.Println("list message")
+      cmdList_Messages()
 		default:
 			cmdHelp()
 		}
@@ -64,15 +64,15 @@ func Start() {
 		item := strings.ToLower(os.Args[2])
 		switch item {
 		case "account":
-			fmt.Println("delete account")
+      cmdDelete_Account()
 		case "oauth-client":
-			fmt.Println("delete oauth client")
+      cmdDelete_OAuthClient()
 		case "oauth-token":
-			fmt.Println("delete oauth token")
+      cmdDelete_OAuthToken()
 		case "mailing-list":
-			fmt.Println("delete mailing-list")
+      cmdDelete_MailingList()
 		case "message":
-			fmt.Println("delete message")
+      cmdDelete_Message()
 		default:
 			cmdHelp()
 		}

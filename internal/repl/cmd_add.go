@@ -85,10 +85,10 @@ func cmdAdd_MailingList() {
 		fmt.Println("ERROR: ", err)
 		return
 	}
-  if err := database.RecipientsAdd(name, list); err != nil {
+	if err := database.MailingListAdd(name, list); err != nil {
 		fmt.Println("ERROR: ", err)
 		return
-  }
+	}
 }
 
 func cmdAdd_Message() {
@@ -98,13 +98,13 @@ func cmdAdd_Message() {
 		terminalinput.ReadInput("Enter a subject for this message\n\r-> "))
 	filePath := strings.TrimSpace(
 		terminalinput.ReadInput("Enter the message. Either .html or .txt\n\r-> "))
-  message, msg_type, err := parser.Email(filePath)
-  if err != nil {
-    fmt.Println("ERROR: ", err)
-    return
-  }
-  if err := database.MessageAdd(name, subject, msg_type, message); err != nil {
+	message, msg_type, err := parser.Email(filePath)
+	if err != nil {
 		fmt.Println("ERROR: ", err)
 		return
-  }
+	}
+	if err := database.MessageAdd(name, subject, msg_type, message); err != nil {
+		fmt.Println("ERROR: ", err)
+		return
+	}
 }

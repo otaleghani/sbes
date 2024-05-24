@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+  "fmt"
 )
 
 func OAuthTokenAdd(name, token string) error {
@@ -38,4 +39,19 @@ func OAuthTokenDelete(name string) error {
 		return err
 	}
 	return nil
+}
+
+func OAuthTokensList() error {
+	Db, err := openDatabase()
+	if err != nil {
+		return err
+	}
+  if len(Db.OAuth_tokens) != 0 {
+    fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
+  }
+  for index, val := range Db.OAuth_tokens {
+    fmt.Printf("%v | Username: %v | Token: %v\n", index, val.Token, val.Token)
+    fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
+  }
+  return nil
 }

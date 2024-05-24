@@ -5,21 +5,16 @@ import (
   "fmt"
 )
 
-func MessageAdd(name, subject, msg_type string, body string) error {
+func MailingListAdd(name string, list []string) error {
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
-	if _, exists := Db.Messages[name]; exists != false {
-		return errors.New("Message already present.")
+	if _, exists := Db.Mailing_lists[name]; exists != false {
+		return errors.New("Mailing list already present.")
 	}
-
-	Db.Messages[name] = Message{
-		Subject:  subject,
-		Body:     body,
-		Msg_Type: msg_type,
-	}
+	Db.Mailing_lists[name] = list
 
 	err = writeDatabase(Db)
 	if err != nil {
@@ -28,13 +23,13 @@ func MessageAdd(name, subject, msg_type string, body string) error {
 	return nil
 }
 
-func MessageDelete(name string) error {
+func MailingListDelete(name string) error {
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
-	delete(Db.Messages, name)
+	delete(Db.Mailing_lists, name)
 
 	err = writeDatabase(Db)
 	if err != nil {
@@ -43,16 +38,16 @@ func MessageDelete(name string) error {
 	return nil
 }
 
-func MessagesList() error {
+func MailingListsList() error {
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
-  if len(Db.Messages) != 0 {
+  if len(Db.Mailing_lists) != 0 {
     fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
   }
-  for index, val := range Db.Messages {
-   fmt.Printf("%v | Type: %v | Body: %v\n", index, val.Msg_Type, val.Body)
+  for index, val := range Db.Mailing_lists {
+    fmt.Printf("%v | 5 items: %v\n", index, val[0] + val[1] + val[2])
     fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
   }
   return nil

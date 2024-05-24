@@ -2,24 +2,20 @@ package database
 
 import (
 	"errors"
+  "fmt"
 )
 
-func AccountAdd(username, password, smtpHost string, smtpPort int) error {
+func AccountAdd(user, pass, host string, port int) error {
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
-
 	// Checks if account is present
-	if _, exists := Db.Accounts[username]; exists != false {
+	if _, exists := Db.Accounts[user]; exists != false {
 		return errors.New("Username already present. If you want to update it use auth-update")
 	}
-	Db.Accounts[username] = Account{
-		Username: username,
-		Password: password,
-		SmtpHost: smtpHost,
-		SmtpPort: smtpPort,
-	}
+	Db.Accounts[user] = Account{
+    Username:user, Password:pass, SmtpHost:host, SmtpPort:port}
 
 	err = writeDatabase(Db)
 	if err != nil {
@@ -56,4 +52,19 @@ func AccountUpdate(account Account) error {
 		return err
 	}
 	return nil
+}
+
+func AccountsList() error {
+	Db, err := openDatabase()
+	if err != nil {
+		return err
+	}
+  if len(Db.Accounts) != 0 {
+    fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
+  }
+  for index, val := range Db.Accounts {
+    fmt.Printf("%v | Host: %v | Port: %v\n", index, val.SmtpHost, val.SmtpPort)
+    fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
+  }
+  return nil
 }
