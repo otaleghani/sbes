@@ -4,7 +4,7 @@ import (
   "errors"
 )
 
-func RecipentsAdd(list []string, name string) error {
+func RecipientsAdd(name string, list []string) error {
   Db, err := openDatabase()
   if err != nil {
     return err

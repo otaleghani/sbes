@@ -4,7 +4,7 @@ import (
   "errors"
 )
 
-func OauthClientAdd(name, client_id, client_secret, username string) error {
+func OauthClientAdd(name, client_id, client_secret string) error {
   Db, err := openDatabase()
   if err != nil {
     return err
@@ -16,7 +16,7 @@ func OauthClientAdd(name, client_id, client_secret, username string) error {
   Db.OAuth_clients[name] = OAuthClient{
     Client_Id: client_id,
     Client_Secret: client_secret,
-    Username: username,
+    Name: name,
   }
 
   err = writeDatabase(Db)

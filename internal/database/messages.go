@@ -4,7 +4,7 @@ import (
   "errors"
 )
 
-func MessageAdd(body []byte, subject, name, msg_type string) error {
+func MessageAdd(name, subject, msg_type string, body []byte) error {
   Db, err := openDatabase()
   if err != nil {
     return err
@@ -26,7 +26,7 @@ func MessageAdd(body []byte, subject, name, msg_type string) error {
   return nil
 }
 
-func messageDelete(name string) error {
+func MessageDelete(name string) error {
   Db, err := openDatabase()
   if err != nil {
     return err

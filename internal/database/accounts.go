@@ -4,7 +4,7 @@ import (
   "errors"
 )
 
-func AuthAdd(username, password, smtpHost string, smtpPort int) error {
+func AccountAdd(username, password, smtpHost string, smtpPort int) error {
   Db, err := openDatabase()
   if err != nil {
     return err
@@ -28,7 +28,7 @@ func AuthAdd(username, password, smtpHost string, smtpPort int) error {
   return nil
 }
 
-func AuthDelete(username string) error {
+func AccountDelete(username string) error {
   Db, err := openDatabase()
   if err != nil {
     return err
@@ -43,7 +43,7 @@ func AuthDelete(username string) error {
   return nil
 }
 
-func AuthUpdate(account Account) error {
+func AccountUpdate(account Account) error {
   Db, err := openDatabase()
   if err != nil {
     return err

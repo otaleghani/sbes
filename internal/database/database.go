@@ -13,7 +13,7 @@ type Account struct {
 }
 
 type OAuthClient struct {
-  Username string `json:"username"`
+  Name string `json:"name"`
   Client_Id string `json:"client_id"`
   Client_Secret string `json:"client_secret"`
 }
