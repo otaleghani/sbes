@@ -68,3 +68,17 @@ func AccountsList() error {
   }
   return nil
 }
+
+func AccountGet(user string) (string, string, string, int, error) {
+	Db, err := openDatabase()
+	if err != nil {
+	  return "","","",0,nil
+	}
+
+  val, exists := Db.Accounts[user]
+  if exists != true {
+	  return "", "", "", 0, errors.New("Record does not exist")
+  }
+
+	return val.Username, val.Password, val.SmtpHost, val.SmtpPort, nil
+}

@@ -69,3 +69,18 @@ func OAuthClientsList() error {
   }
   return nil
 }
+
+func OauthClientGet(name string) (string, string, error) {
+  // name, subject, msg_type, body
+	Db, err := openDatabase()
+	if err != nil {
+	  return "", "", errors.New("Record does not exist")
+	}
+
+  val, exists := Db.OAuth_clients[name]
+  if exists != true {
+	  return "", "", errors.New("Record does not exist")
+  }
+
+	return val.Client_Id, val.Client_Secret, nil
+}

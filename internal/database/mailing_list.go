@@ -52,3 +52,18 @@ func MailingListsList() error {
   }
   return nil
 }
+
+func MailingListGet(name string) (string, []string, error) {
+  // name, subject, msg_type, body
+	Db, err := openDatabase()
+	if err != nil {
+	  return "", []string{}, errors.New("Record does not exist")
+	}
+
+  val, exists := Db.Mailing_lists[name]
+  if exists != true {
+	  return "", []string{}, errors.New("Record does not exist")
+  }
+
+	return name, val, nil
+}

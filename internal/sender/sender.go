@@ -5,21 +5,31 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-func TestSMTPConnection(smtpHost string, smtpPort int, username, password string) error {
-	d := gomail.NewDialer(smtpHost, smtpPort, username, password)
+type Email struct {
+  // Authentication
+  SmtpHost string
+  SmtpPort int
+  Username string
+  Password string
+  Oauth string
 
-	// Try to establish a connection
-	c, err := d.Dial()
-	if err != nil {
-		return err
-	}
-	defer c.Close()
-	return nil
+  // Message
+  From string
+  Mailing_List []string
+  Subject string
+  Body string
+  Msg_Type string
 }
 
-// func sendtestemail
+func SendEmails(
+  smtpHost string,
+  smtpPort int,
+  username, password, from string,
+  to []string,
+  subject,
+  body string,
+) error {
 
-func SendEmails(smtpHost string, smtpPort int, username, password, from string, to []string, subject, body string) error {
 	d := gomail.NewDialer(smtpHost, smtpPort, username, password)
 	s, err := d.Dial()
 	if err != nil {
@@ -41,20 +51,3 @@ func SendEmails(smtpHost string, smtpPort int, username, password, from string, 
 	}
 	return nil
 }
-
-// func main() {
-//     // Define your SMTP server details
-//     smtpHost := "smtp.gmail.com"
-//     smtpPort := 587
-//
-//     // Gmail account credentials
-//     username := "o.taleghani@talesign.com"
-//     password := ""
-//
-//     // Email details
-//     from := "o.taleghani@talesign.com"
-//     to := []string{"account@aficleaning.com", "o.taleghani@talesign.com"} // List of recipients
-//     subject := "Test Email"
-//     body := "<h1>Hello, this is a test email!</h1>"
-//
-// }

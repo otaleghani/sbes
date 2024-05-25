@@ -55,3 +55,18 @@ func OAuthTokensList() error {
   }
   return nil
 }
+
+func OAuthTokenGet(name string) (string, string, error) {
+  // name, subject, msg_type, body
+	Db, err := openDatabase()
+	if err != nil {
+	  return "", "", errors.New("Record does not exist")
+	}
+
+  val, exists := Db.OAuth_tokens[name]
+  if exists != true {
+	  return "", "", errors.New("Record does not exist")
+  }
+
+	return val.Username, val.Token, nil
+}

@@ -5,7 +5,7 @@ import (
   "fmt"
 )
 
-func MessageAdd(name, subject, msg_type string, body string) error {
+func MessageAdd(name, subject, msg_type, body string) error {
 	Db, err := openDatabase()
 	if err != nil {
 		return err
@@ -56,4 +56,18 @@ func MessagesList() error {
     fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
   }
   return nil
+}
+func MessageGet(name string) (string, string, string, string, error) {
+  // name, subject, msg_type, body
+	Db, err := openDatabase()
+	if err != nil {
+	  return "", "", "", "", nil
+	}
+
+  val, exists := Db.Messages[name]
+  if exists != true {
+	  return "", "", "", "", errors.New("Record does not exist")
+  }
+
+	return name, val.Subject, val.Msg_Type, val.Body, nil
 }

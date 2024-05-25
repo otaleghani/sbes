@@ -86,9 +86,10 @@ func Start() {
 		auth := strings.ToLower(os.Args[2])
 		switch auth {
 		case "password":
-			fmt.Println("password based auth")
+      cmdSend_password()
 		case "oauth":
-			fmt.Println("oauth authentication")
+      cmdSend_oauth()
+			
 		}
 
 	case "help":
