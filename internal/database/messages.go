@@ -57,6 +57,7 @@ func MessagesList() error {
   }
   return nil
 }
+
 func MessageGet(name string) (string, string, string, string, error) {
   // name, subject, msg_type, body
 	Db, err := openDatabase()
