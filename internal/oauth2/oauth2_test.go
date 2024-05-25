@@ -6,6 +6,9 @@ import (
 )
 
 func Test_Oauth(t *testing.T) {
-	result := GetOauth2("", "")
+	//result := GetOauth2("", "")
+	//fmt.Println(result)
+  result, _ := GetAccessToken("", "","thetoken")
+
 	fmt.Println(result)
 }

@@ -42,6 +42,9 @@ func GetOauth2(id, secret string) string {
 	// Wait for the token to be received on the token channel.
 	token := <-tokenChan
 
+  fmt.Println(token.RefreshToken)
+
+	// return token.RefreshToken
 	// Return the access token.
 	return token.AccessToken
 }
