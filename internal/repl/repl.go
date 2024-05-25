@@ -1,7 +1,6 @@
 package repl
 
 import (
-	"fmt"
 	"os"
 	"strings"
 )
@@ -89,7 +88,8 @@ func Start() {
       cmdSend_password()
 		case "oauth":
       cmdSend_oauth()
-			
+    default:
+      cmdHelp()
 		}
 
 	case "help":
@@ -98,8 +98,4 @@ func Start() {
 	default:
 		cmdHelp()
 	}
-}
-
-func cmdHelp() {
-	fmt.Println("Help ")
 }
