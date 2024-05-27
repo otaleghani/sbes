@@ -2,7 +2,7 @@ package repl
 
 import (
 	"fmt"
-  "strings"
+	"strings"
 
 	"github.com/otaleghani/sbes/internal/database"
 	"github.com/otaleghani/sbes/internal/terminalinput"
@@ -27,14 +27,14 @@ func cmdDelete_OAuthClient() {
 	}
 }
 
-func cmdDelete_OAuthToken() {
-	name := strings.TrimSpace(
-		terminalinput.ReadInput("Enter name of OAuthToken that you want to delete\n\r-> "))
-	if err := database.OAuthTokenDelete(name); err != nil {
-		fmt.Println("ERROR: ", err)
-		return
-	}
-}
+// func cmdDelete_OAuthToken() {
+// 	name := strings.TrimSpace(
+// 		terminalinput.ReadInput("Enter name of OAuthToken that you want to delete\n\r-> "))
+// 	if err := database.OAuthTokenDelete(name); err != nil {
+// 		fmt.Println("ERROR: ", err)
+// 		return
+// 	}
+// }
 
 func cmdDelete_MailingList() {
 	name := strings.TrimSpace(

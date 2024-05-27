@@ -1,71 +1,67 @@
 # sbes
-Simple bulk email sender
+[![Go Report Card](https://goreportcard.com/badge/github.com/otaleghani/sbes)](https://goreportcard.com/report/github.com/otaleghani/sbes)
+
+Simple bulk email sender. A command line utility to send bulk email to your mailing lists right in your terminal.
+
+## Basic usage
+
+Every single command waits for your input, so you don't have to learn a bunch of flags.
+
+To get started, add a new account with `add account`. It will ask for your username, password, SMTP host and port. Your data is store locally and never leaves your pc.
+
+``` bash
+sbes add account
+```
+
+You can then add a new OAuth2 token for your account. This is optional, but it's required with some email providers, like Gmail. You will need to generate from Google Cloud a new project and get the OAuth2 Client Id and Secret. You can find a more in-depth explaination at [How to setup OAuth2](#How to setup OAuth2).
+
+```  bash
+sbes add oauth-client
+sbes add oauth-token
+```
+
+Afterwards you will need to specify a mailing list and a message to send. Here you will need a `.csv` file for the mailing list and either a `.txt` or `.html` file for the message. Provide to sbes the absolute path.
+
+Every single data is saved on a `.json` file, so you can even make sbes portable.
+
+```  bash
+sbes add mailing-list
+sbes add message
+```
+
+Finally you can specify to sbes which message to send from which account to which mailing list.
+
+```  bash
+sbes send password
+sbes send oauth
+```
+
+## How to setup OAuth2
+
+1. Create a Google Cloud account
+2. New project
+3. Activate Gmail API
+4. Create a new OAuth2 client for this app
 
 ## Commands
 
-### send 
+### add 
 
-Takes a list of recipient (csv) a email address and a message (either txt or html format) and sends the message to every recipient.
+### delete
 
--r recipient.csv    -> path to recipient list
--a auth             -> setted auth
--m message          -> either txt or html
+### list
 
-### auth 
-
-Adds a new authorized email address.
-
--e email@gmail.com  -> email address
--p password         -> password
+### send
 
 ## To do
 
-- [ ] Data storage in json
-- [ ] TestSMTPConnection function
-- [ ] Some checks before sending, like is the address duplicate?
-- [ ] Test this with other email
+Before 0.1.0
+
+- [ ] Validate input before adding to database
+- [ ] Create a better print format fro add, delete and send
 - [ ] Encrypt sensitive data
+- [ ] README.md
+- [ ] Wiki
 
 ### Data storage
 
-``` javascript
-{
-    "Accounts": {
-        "username": {
-            "smtpPort": 587,
-            "smtpHost": "smtp.gmail.com",
-            "username": "",
-            "password": "",
-        },
-    }
-}
-
-{
-   "accounts":[
-      {
-         "username":"",
-         "password":""
-      },
-      {
-         "username":"",
-         "password":""
-      },
-   ]
-}
-```
-
-### TestSMTPConnection
-
-``` go
-func TestSMTPConnection(smtpHost string, smtpPort int, username, password string) error {
-    d := gomail.NewDialer(smtpHost, smtpPort, username, password)
-
-    // Try to establish a connection
-    c, err := d.Dial()
-    if err != nil {
-        return err
-    }
-    defer c.Close()
-    return nil
-}
-```

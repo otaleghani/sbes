@@ -24,8 +24,8 @@ func Start() {
 			cmdAdd_Account()
 		case "oauth-client":
 			cmdAdd_OAuthClient()
-		case "oauth-token":
-			cmdAdd_OAuthToken()
+			// 	case "oauth-token":
+			// 		cmdAdd_OAuthToken()
 		case "mailing-list":
 			cmdAdd_MailingList()
 		case "message":
@@ -42,15 +42,15 @@ func Start() {
 		item := strings.ToLower(os.Args[2])
 		switch item {
 		case "account":
-      cmdList_Accounts()
+			cmdList_Accounts()
 		case "oauth-client":
-      cmdList_OAuthClients()
-		case "oauth-token":
-      cmdList_OAuthTokens()
+			cmdList_OAuthClients()
+		// case "oauth-token":
+		//   cmdList_OAuthTokens()
 		case "mailing-list":
-      cmdList_MailingLists()
+			cmdList_MailingLists()
 		case "message":
-      cmdList_Messages()
+			cmdList_Messages()
 		default:
 			cmdHelp()
 		}
@@ -63,15 +63,15 @@ func Start() {
 		item := strings.ToLower(os.Args[2])
 		switch item {
 		case "account":
-      cmdDelete_Account()
+			cmdDelete_Account()
 		case "oauth-client":
-      cmdDelete_OAuthClient()
-		case "oauth-token":
-      cmdDelete_OAuthToken()
+			cmdDelete_OAuthClient()
+		// case "oauth-token":
+		//   cmdDelete_OAuthToken()
 		case "mailing-list":
-      cmdDelete_MailingList()
+			cmdDelete_MailingList()
 		case "message":
-      cmdDelete_Message()
+			cmdDelete_Message()
 		default:
 			cmdHelp()
 		}
@@ -85,15 +85,31 @@ func Start() {
 		auth := strings.ToLower(os.Args[2])
 		switch auth {
 		case "password":
-      cmdSend_password()
+			cmdSend_password()
 		case "oauth":
-      cmdSend_oauth()
-    default:
-      cmdHelp()
+			cmdSend_oauth()
+		default:
+			cmdHelp()
 		}
 
 	case "help":
-		cmdHelp()
+		if len(os.Args) == 2 {
+			cmdHelp()
+			return
+		}
+		help := strings.ToLower(os.Args[2])
+		switch help {
+		case "add":
+			cmdHelpAdd()
+		case "delete":
+			cmdHelpDelete()
+		case "list":
+			cmdHelpList()
+		case "send":
+			cmdHelpSend()
+		default:
+			cmdHelp()
+		}
 
 	default:
 		cmdHelp()

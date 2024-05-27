@@ -8,26 +8,48 @@ import (
 	"github.com/otaleghani/sbes/internal/database"
 	"github.com/otaleghani/sbes/internal/oauth2"
 	"github.com/otaleghani/sbes/internal/parser"
+	"github.com/otaleghani/sbes/internal/sender"
 	"github.com/otaleghani/sbes/internal/terminalinput"
 )
 
 func cmdAdd_Account() {
 	user := strings.TrimSpace(
-		terminalinput.ReadInput("Enter username\n\r-> "))
+		terminalinput.ReadInput("Username: "))
+
+	// checks if user is alreay present or not
+	username, _, _, _, _, _, err := database.AccountGet(user)
+	if username != "" {
+		fmt.Println("ERROR: User already present")
+		return
+	}
+
 	pass := strings.TrimSpace(
-		terminalinput.ReadInput("Enter password\n\r-> "))
+		terminalinput.ReadInput("Password: "))
+
 	host := strings.TrimSpace(
-		terminalinput.ReadInput("Enter host\n\r-> "))
+		terminalinput.ReadInput("Host: "))
+
 	port, err := strconv.Atoi(
 		strings.TrimSpace(
-			terminalinput.ReadInput("Enter port\n\r-> ")))
+			terminalinput.ReadInput("Port: ")))
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 		return
 	}
-	fmt.Printf("\nTesting connection...\n\tUsername: %v,\n\tPassword: %v\n\tHost: %v,\n\tPort: %v\n\n", user, pass, host, port)
+
+	// Test connection
+	fmt.Printf("\nLOG: Testing connection...\n\tUsername: %v,\n\tPassword: %v\n\tHost: %v,\n\tPort: %v\n\n", user, pass, host, port)
+	err = sender.TestSMTPConnection(host, port, user, pass)
+	if err != nil {
+		fmt.Println("ERROR: ", err)
+		return
+	}
+	fmt.Println("SUCCESS: Connection successful")
+
+	fmt.Println("LOG: Saving data to local database")
 	if err := database.AccountAdd(user, pass, host, port); err != nil {
 		fmt.Println("ERROR: ", err)
+		return
 	}
 	fmt.Println("SUCCESS: Account saved")
 }
@@ -47,21 +69,30 @@ func cmdAdd_OAuthClient() {
 }
 
 func cmdAdd_OAuthToken() {
-	name := strings.TrimSpace(
-		terminalinput.ReadInput("Enter a name for this OAuth Token\n\r-> "))
+	user := strings.TrimSpace(
+		terminalinput.ReadInput("Account username\n\r-> "))
+	username, _, _, _, _, _, err := database.AccountGet(user)
+	if err != nil {
+		fmt.Println("ERROR: ", err)
+		return
+	}
+
+	// Asks for client name and searches it
 	nameClient := strings.TrimSpace(
-		terminalinput.ReadInput("Enter the name of the Client that you want to use\n\r-> "))
+		terminalinput.ReadInput("Client to generate token\n\r-> "))
 	id, secret, err := database.OAuthClientFind(nameClient)
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 		return
 	}
-	token := oauth2.GetOauth2(id, secret)
-	if token == "" {
+
+	refreshToken, accessToken := oauth2.GetOauth2(id, secret)
+	if refreshToken == "" {
 		fmt.Println("ERROR: Token not generated. Check you client credentials.")
 		return
 	}
-	if err := database.OAuthTokenAdd(name, token); err != nil {
+
+	if err := database.AccountTokenAdd(username, refreshToken, accessToken); err != nil {
 		fmt.Println("ERROR: ", err)
 		return
 	}

@@ -2,7 +2,7 @@ package database
 
 import (
 	"errors"
-  "fmt"
+	"fmt"
 )
 
 func MessageAdd(name, subject, msg_type, body string) error {
@@ -16,9 +16,9 @@ func MessageAdd(name, subject, msg_type, body string) error {
 	}
 
 	Db.Messages[name] = Message{
-		Subject:  subject,
-		Body:     body,
-		Msg_Type: msg_type,
+		Subject: subject,
+		Body:    body,
+		MsgType: msg_type,
 	}
 
 	err = writeDatabase(Db)
@@ -48,27 +48,40 @@ func MessagesList() error {
 	if err != nil {
 		return err
 	}
-  if len(Db.Messages) != 0 {
-    fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
-  }
-  for index, val := range Db.Messages {
-   fmt.Printf("%v | Type: %v | Body: %v\n", index, val.Msg_Type, val.Body)
-    fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
-  }
-  return nil
+
+	fmt.Printf(
+		"%-20v %-47v %6v\n",
+		"NAME", "SUBJECT", "TYPE")
+
+	for name, val := range Db.Messages {
+		truncName := name
+		if len(truncName) > 19 {
+			truncName = truncName[:19]
+		}
+
+		truncSubject := val.Subject
+		if len(truncSubject) > 45 {
+			truncSubject = truncSubject[:45]
+		}
+
+		fmt.Printf(
+			"%-20v %-47v %6v\n",
+			truncName, truncSubject, val.MsgType)
+	}
+	return nil
 }
 
 func MessageGet(name string) (string, string, string, string, error) {
-  // name, subject, msg_type, body
+	// name, subject, msg_type, body
 	Db, err := openDatabase()
 	if err != nil {
-	  return "", "", "", "", nil
+		return "", "", "", "", nil
 	}
 
-  val, exists := Db.Messages[name]
-  if exists != true {
-	  return "", "", "", "", errors.New("Record does not exist")
-  }
+	val, exists := Db.Messages[name]
+	if exists != true {
+		return "", "", "", "", errors.New("Record does not exist")
+	}
 
-	return name, val.Subject, val.Msg_Type, val.Body, nil
+	return name, val.Subject, val.MsgType, val.Body, nil
 }

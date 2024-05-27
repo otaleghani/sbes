@@ -6,35 +6,34 @@ import (
 )
 
 type Account struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	SmtpHost string `json:"smtpHost"`
-	SmtpPort int    `json:"smtpPort"`
+	Username     string `json:"username"`
+	Password     string `json:"password"`
+	SmtpHost     string `json:"smtpHost"`
+	SmtpPort     int    `json:"smtpPort"`
+	RefreshToken string `json:"refresh_token"`
+	AccessToken  string `json:"access_token"`
 }
 
 type OAuthClient struct {
-	Name          string `json:"name"`
-	Client_Id     string `json:"client_id"`
-	Client_Secret string `json:"client_secret"`
-}
-
-type OAuthToken struct {
-	Username string `json:"username"`
-	Token    string `json:"token"`
+	ClientId     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
 }
 
 type Message struct {
-	Subject  string `json:"subject"`
-	Body     string `json:"body"`
-	Msg_Type string `json:"msg_type"` // either plain or html
+	Subject string `json:"subject"`
+	Body    string `json:"body"`
+	MsgType string `json:"msg_type"` // either plain or html
+}
+
+type MailingList struct {
+	List []string `json:"list"`
 }
 
 type Database struct {
-	Accounts      map[string]Account     `json:"accounts"`
-	OAuth_tokens  map[string]OAuthToken  `json:"oauths_tokens"`
-	OAuth_clients map[string]OAuthClient `json:"oauths_clients"`
-	Mailing_lists map[string][]string    `json:"mailing_lists"`
-	Messages      map[string]Message     `json:"messages"`
+	Accounts     map[string]Account     `json:"accounts"`
+	OAuthClients map[string]OAuthClient `json:"oauths_clients"`
+	MailingLists map[string]MailingList `json:"mailing_lists"`
+	Messages     map[string]Message     `json:"messages"`
 }
 
 func databasePath() (string, string, error) {
@@ -74,11 +73,10 @@ func openDatabase() (Database, error) {
 
 	// Marshals the json
 	Db := Database{
-		Accounts:      make(map[string]Account),
-		OAuth_tokens:  make(map[string]OAuthToken),
-		OAuth_clients: make(map[string]OAuthClient),
-		Mailing_lists:    make(map[string][]string),
-		Messages:      make(map[string]Message),
+		Accounts:     make(map[string]Account),
+		OAuthClients: make(map[string]OAuthClient),
+		MailingLists: make(map[string]MailingList),
+		Messages:     make(map[string]Message),
 	}
 	if err = json.Unmarshal(data, &Db); err != nil {
 		return Database{}, err

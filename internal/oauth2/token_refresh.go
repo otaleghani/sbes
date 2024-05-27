@@ -25,7 +25,7 @@ var (
 // GetOauth initializes the OAuth2 configuration with provided client ID and secret,
 // sets up HTTP handlers, and starts the web server. It waits for the token to be received
 // through the token channel and returns the access token.
-func GetOauth2(id, secret string) string {
+func GetOauth2(id, secret string) (string, string) {
 	oauthConfig.ClientID = id
 	oauthConfig.ClientSecret = secret
 
@@ -42,11 +42,9 @@ func GetOauth2(id, secret string) string {
 	// Wait for the token to be received on the token channel.
 	token := <-tokenChan
 
-  fmt.Println(token.RefreshToken)
+	fmt.Println(token.RefreshToken)
 
-	// return token.RefreshToken
-	// Return the access token.
-	return token.AccessToken
+	return token.RefreshToken, token.AccessToken
 }
 
 // handleMain redirects the user to the Google OAuth2 authorization URL.

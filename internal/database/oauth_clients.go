@@ -2,7 +2,7 @@ package database
 
 import (
 	"errors"
-  "fmt"
+	"fmt"
 )
 
 func OAuthClientAdd(name, client_id, client_secret string) error {
@@ -11,13 +11,12 @@ func OAuthClientAdd(name, client_id, client_secret string) error {
 		return err
 	}
 
-	if _, exists := Db.OAuth_clients[name]; exists != false {
+	if _, exists := Db.OAuthClients[name]; exists != false {
 		return errors.New("OAuth client already present. Delete it first.")
 	}
-	Db.OAuth_clients[name] = OAuthClient{
-		Client_Id:     client_id,
-		Client_Secret: client_secret,
-		Name:          name,
+	Db.OAuthClients[name] = OAuthClient{
+		ClientId:     client_id,
+		ClientSecret: client_secret,
 	}
 
 	err = writeDatabase(Db)
@@ -33,7 +32,7 @@ func OAuthClientDelete(name string) error {
 		return err
 	}
 
-	delete(Db.OAuth_clients, name)
+	delete(Db.OAuthClients, name)
 
 	err = writeDatabase(Db)
 	if err != nil {
@@ -48,11 +47,11 @@ func OAuthClientFind(name string) (string, string, error) {
 		return "", "", err
 	}
 
-	if _, exists := Db.OAuth_clients[name]; exists != true {
+	if _, exists := Db.OAuthClients[name]; exists != true {
 		return "", "", errors.New("OAuth does not exist.")
 	}
 
-	return Db.OAuth_clients[name].Client_Id, Db.OAuth_clients[name].Client_Secret, nil
+	return Db.OAuthClients[name].ClientId, Db.OAuthClients[name].ClientSecret, nil
 }
 
 func OAuthClientsList() error {
@@ -60,27 +59,43 @@ func OAuthClientsList() error {
 	if err != nil {
 		return err
 	}
-  if len(Db.OAuth_clients) != 0 {
-    fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
-  }
-  for index, val := range Db.OAuth_clients {
-    fmt.Printf("%v | Id: %v | Secret: %v\n", index, val.Client_Id, val.Client_Secret)
-    fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
-  }
-  return nil
+
+	fmt.Printf(
+		"%-20v %-26v %-28v\n",
+		"NAME", "ID", "SECRET")
+
+	for name, val := range Db.OAuthClients {
+		truncName := name
+		if len(truncName) > 19 {
+			truncName = truncName[:19]
+		}
+		truncId := val.ClientId
+		if len(truncId) > 25 {
+			truncId = truncId[:25]
+		}
+		truncSecret := val.ClientSecret
+		if len(truncSecret) > 27 {
+			truncSecret = truncSecret[:27]
+		}
+
+		fmt.Printf(
+			"%-20v %-26v %-28v\n",
+			truncName, truncId, truncSecret)
+	}
+	return nil
 }
 
 func OauthClientGet(name string) (string, string, error) {
-  // name, subject, msg_type, body
+	// name, subject, msg_type, body
 	Db, err := openDatabase()
 	if err != nil {
-	  return "", "", errors.New("Record does not exist")
+		return "", "", errors.New("Record does not exist")
 	}
 
-  val, exists := Db.OAuth_clients[name]
-  if exists != true {
-	  return "", "", errors.New("Record does not exist")
-  }
+	val, exists := Db.OAuthClients[name]
+	if exists != true {
+		return "", "", errors.New("Record does not exist")
+	}
 
-	return val.Client_Id, val.Client_Secret, nil
+	return val.ClientId, val.ClientSecret, nil
 }

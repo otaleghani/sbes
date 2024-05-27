@@ -2,7 +2,8 @@ package database
 
 import (
 	"errors"
-  "fmt"
+	"fmt"
+	"strings"
 )
 
 func MailingListAdd(name string, list []string) error {
@@ -11,10 +12,10 @@ func MailingListAdd(name string, list []string) error {
 		return err
 	}
 
-	if _, exists := Db.Mailing_lists[name]; exists != false {
+	if _, exists := Db.MailingLists[name]; exists != false {
 		return errors.New("Mailing list already present.")
 	}
-	Db.Mailing_lists[name] = list
+	Db.MailingLists[name] = MailingList{List: list}
 
 	err = writeDatabase(Db)
 	if err != nil {
@@ -29,7 +30,7 @@ func MailingListDelete(name string) error {
 		return err
 	}
 
-	delete(Db.Mailing_lists, name)
+	delete(Db.MailingLists, name)
 
 	err = writeDatabase(Db)
 	if err != nil {
@@ -43,27 +44,47 @@ func MailingListsList() error {
 	if err != nil {
 		return err
 	}
-  if len(Db.Mailing_lists) != 0 {
-    fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
-  }
-  for index, val := range Db.Mailing_lists {
-    fmt.Printf("%v | 5 items: %v\n", index, val[0] + val[1] + val[2])
-    fmt.Printf("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n")
-  }
-  return nil
+	fmt.Printf(
+		"%-20v %-55v\n",
+		"NAME", "EXAMPLE")
+
+	for index, val := range Db.MailingLists {
+		truncIndex := index
+		if len(truncIndex) > 19 {
+			truncIndex = truncIndex[:19]
+		}
+
+		items := len(val.List)
+		if len(val.List) > 5 {
+			items = 5
+		}
+		examplesArray := []string{}
+
+		for i := 0; i < items; i++ {
+			examplesArray = append(examplesArray, val.List[i])
+		}
+		exampleString := strings.Join(examplesArray, ", ")
+
+		truncExamples := exampleString
+		if len(exampleString) > 54 {
+			truncExamples = exampleString[:54]
+		}
+		fmt.Printf("%-20v %-55v\n", index, truncExamples)
+	}
+	return nil
 }
 
 func MailingListGet(name string) (string, []string, error) {
-  // name, subject, msg_type, body
+	// name, subject, msg_type, body
 	Db, err := openDatabase()
 	if err != nil {
-	  return "", []string{}, errors.New("Record does not exist")
+		return "", []string{}, errors.New("Record does not exist")
 	}
 
-  val, exists := Db.Mailing_lists[name]
-  if exists != true {
-	  return "", []string{}, errors.New("Record does not exist")
-  }
+	val, exists := Db.MailingLists[name]
+	if exists != true {
+		return "", []string{}, errors.New("Record does not exist")
+	}
 
-	return name, val, nil
+	return name, val.List, nil
 }

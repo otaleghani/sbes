@@ -1,8 +1,8 @@
 package oauth2
 
 import (
-  "fmt"
-  "context"
+	"context"
+	"fmt"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -11,14 +11,14 @@ import (
 func GetAccessToken(clientID, clientSecret, refreshToken string) (string, error) {
 	// Create a token with the refresh token.
 	// token := &oauth2.Token{RefreshToken: refreshToken}
-  config := &oauth2.Config{
-    ClientID:     "",
+	config := &oauth2.Config{
+		ClientID:     "",
 		ClientSecret: "",
-		Endpoint:    google.Endpoint,
-  }
-  token := &oauth2.Token{
-    RefreshToken: "",
-  }
+		Endpoint:     google.Endpoint,
+	}
+	token := &oauth2.Token{
+		RefreshToken: "",
+	}
 
 	// Create a token source with the refresh token.
 	tokenSource := config.TokenSource(context.Background(), token)
@@ -29,6 +29,6 @@ func GetAccessToken(clientID, clientSecret, refreshToken string) (string, error)
 		return "", err
 	}
 
-  fmt.Println(token)
+	fmt.Println(token)
 	return newToken.AccessToken, nil
 }
