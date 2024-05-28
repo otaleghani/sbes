@@ -1,3 +1,5 @@
+// Functions to manupulate the mailing lists inside the database
+
 package database
 
 import (
@@ -7,16 +9,19 @@ import (
 )
 
 func MailingListAdd(name string, list []string) error {
+  // Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
+  // Checks if the email list is alreay present
 	if _, exists := Db.MailingLists[name]; exists != false {
 		return errors.New("Mailing list already present.")
 	}
 	Db.MailingLists[name] = MailingList{List: list}
 
+  // Writes database
 	err = writeDatabase(Db)
 	if err != nil {
 		return err
@@ -25,13 +30,16 @@ func MailingListAdd(name string, list []string) error {
 }
 
 func MailingListDelete(name string) error {
+  // Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
+  // Deletes item
 	delete(Db.MailingLists, name)
 
+  // Writes database
 	err = writeDatabase(Db)
 	if err != nil {
 		return err
@@ -40,51 +48,64 @@ func MailingListDelete(name string) error {
 }
 
 func MailingListsList() error {
+  // Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
+
+  // Prints data
 	fmt.Printf(
 		"%-20v %-55v\n",
 		"NAME", "EXAMPLE")
 
-	for index, val := range Db.MailingLists {
-		truncIndex := index
-		if len(truncIndex) > 19 {
-			truncIndex = truncIndex[:19]
+  // Cycles through every item
+	for name, val := range Db.MailingLists {
+    // Truncates name if > 19 chars
+		truncName := name
+		if len(truncName) > 19 {
+			truncName = truncName[:19]
 		}
 
+    // Takes 5 or less items
 		items := len(val.List)
 		if len(val.List) > 5 {
 			items = 5
 		}
 		examplesArray := []string{}
 
+    // Cicles throght the List of email and appends them for the lenght of items
 		for i := 0; i < items; i++ {
 			examplesArray = append(examplesArray, val.List[i])
 		}
+    // Joins the emails into a string
 		exampleString := strings.Join(examplesArray, ", ")
 
+    // Truncates the emails if > 54 chars
 		truncExamples := exampleString
 		if len(exampleString) > 54 {
 			truncExamples = exampleString[:54]
 		}
-		fmt.Printf("%-20v %-55v\n", index, truncExamples)
+
+    // Prints the row
+		fmt.Printf("%-20v %-55v\n", truncName, truncExamples)
 	}
 	return nil
 }
 
 func MailingListGet(name string) (string, []string, error) {
-	// name, subject, msg_type, body
+  // Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return "", []string{}, errors.New("Record does not exist")
 	}
 
+	// Checks if the item exists
 	val, exists := Db.MailingLists[name]
 	if exists != true {
 		return "", []string{}, errors.New("Record does not exist")
 	}
 
+  // Returns name and email list
 	return name, val.List, nil
 }

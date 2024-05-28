@@ -1,3 +1,5 @@
+// Function to get the access token from a specific refresh token
+
 package oauth2
 
 import (
@@ -9,18 +11,19 @@ import (
 )
 
 func GetAccessToken(clientID, clientSecret, refreshToken string) (string, error) {
-	// Create a token with the refresh token.
-	// token := &oauth2.Token{RefreshToken: refreshToken}
+	// Sets the oauth2.Config
 	config := &oauth2.Config{
-		ClientID:     "",
-		ClientSecret: "",
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
 		Endpoint:     google.Endpoint,
 	}
+
+  // Initializes the variable that holds the refresh token
 	token := &oauth2.Token{
-		RefreshToken: "",
+		RefreshToken: refreshToken,
 	}
 
-	// Create a token source with the refresh token.
+	// Create a token source with the refresh tokene
 	tokenSource := config.TokenSource(context.Background(), token)
 
 	// Retrieve a new access token.
@@ -29,6 +32,6 @@ func GetAccessToken(clientID, clientSecret, refreshToken string) (string, error)
 		return "", err
 	}
 
-	fmt.Println(token)
+  // Returns the access token
 	return newToken.AccessToken, nil
 }

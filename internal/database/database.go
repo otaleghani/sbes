@@ -1,3 +1,5 @@
+// Helper functions to work with the database
+
 package database
 
 import (
@@ -37,17 +39,22 @@ type Database struct {
 }
 
 func databasePath() (string, string, error) {
+  // Finds home directory
 	homePath, err := os.UserHomeDir()
 	if err != nil {
 		return "", "", err
 	}
+
+  // Creates $HOME/.cache.sbes/ and $HOME/.cache.sbes/db.json
 	path := homePath + "/.cache/sbes/"
 	fileName := path + "db.json"
 
+  // Returns path and filename
 	return path, fileName, nil
 }
 
 func openDatabase() (Database, error) {
+  // Takes path and file name
 	path, fileName, err := databasePath()
 	if err != nil {
 		return Database{}, err
@@ -55,10 +62,12 @@ func openDatabase() (Database, error) {
 
 	// Tests if the file is present
 	if _, err := os.Stat(fileName); os.IsNotExist(err) {
+    // Creates all the paths
 		err = os.MkdirAll(path, 0755)
 		if err != nil {
 			return Database{}, err
 		}
+    // Touches file
 		err = os.WriteFile(fileName, []byte("{}"), 0666)
 		if err != nil {
 			return Database{}, err
@@ -81,19 +90,25 @@ func openDatabase() (Database, error) {
 	if err = json.Unmarshal(data, &Db); err != nil {
 		return Database{}, err
 	}
+
+  // Returns the database struct
 	return Db, nil
 }
 
 func writeDatabase(db Database) error {
+  // Takes path and file name
 	_, fileName, err := databasePath()
 	if err != nil {
 		return err
 	}
 
+  // Encodes json
 	encodedData, err := json.Marshal(db)
 	if err != nil {
 		return err
 	}
+
+  // Writes data in file
 	err = os.WriteFile(fileName, encodedData, 0666)
 	if err != nil {
 		return err

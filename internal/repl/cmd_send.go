@@ -1,12 +1,7 @@
 package repl
 
 import (
-	"encoding/csv"
-	"errors"
-	"flag"
 	"fmt"
-	"io"
-	"os"
 	"strings"
 
 	"github.com/otaleghani/sbes/internal/database"
@@ -15,69 +10,103 @@ import (
 )
 
 func cmdSend_password() {
+  cmdList_Accounts()
 	user := strings.TrimSpace(
 		terminalinput.ReadInput("Choose the account\n\r-> "))
-	user, pass, host, port, _, _, err := database.AccountGet(user)
+  user, pass, host, _, _, port, err := database.AccountGet(user)
 	if err != nil {
+    divider()
 		fmt.Println("ERROR: ", err)
+    return
 	}
-	fmt.Println(user, pass, host, port)
+  fmt.Println()
 
+  cmdList_Messages()
 	message := strings.TrimSpace(
 		terminalinput.ReadInput("Choose the message\n\r-> "))
-	messageName, subject, msg_type, body, err := database.MessageGet(message)
+	_, subject, msg_type, body, err := database.MessageGet(message)
 	if err != nil {
+    divider()
 		fmt.Println("ERROR: ", err)
+    return
 	}
-	fmt.Println(messageName, subject, msg_type, body)
+  fmt.Println()
 
+  cmdList_MailingLists()
 	mailing_list := strings.TrimSpace(
 		terminalinput.ReadInput("Choose the mailing list\n\r-> "))
-	mailingListName, list, err := database.MailingListGet(mailing_list)
+	_, list, err := database.MailingListGet(mailing_list)
 	if err != nil {
+    divider()
 		fmt.Println("ERROR: ", err)
+    return
 	}
-	fmt.Println(mailingListName, list)
+	fmt.Println()
+  divider()
 
-	// get account, message and mailing list, then call SendWithPassword()
+  err = sender.SendEmails(sender.Email{
+    SmtpHost: host,
+    SmtpPort: port,
+    Username: user,
+    Password: pass,
+    Oauth: "",
+    From: user,
+    MailingList: list,
+    Subject: subject,
+    Body: body, 
+    MsgType: msg_type,
+  })
+  if err != nil {
+    divider()
+		fmt.Println("ERROR: ", err)
+    return
+  }
 }
 
 func cmdSend_oauth() {
+  cmdList_Accounts()
 	account := strings.TrimSpace(
 		terminalinput.ReadInput("Choose the account\n\r-> "))
-
-	user, pass, host, refresh, access, port, err := database.AccountGet(account)
+	_, pass, host, refresh, access, port, err := database.AccountGet(account)
 	if err != nil {
+    divider()
 		fmt.Println("ERROR: ", err)
 		return
 	}
 	if refresh == "" {
+    divider()
 		fmt.Println("ERROR: Refresh token is empty")
 		return
 	}
 	if access == "" {
-		fmt.Println("You will need to add a new access token to this account.")
+    divider()
+    fmt.Println("ERROR: Access token not found, update it with sbes add access-token")
 		return
 	}
-	fmt.Println(user, pass, host, port, refresh, access)
+  fmt.Println()
 
+  cmdList_Messages()
 	message := strings.TrimSpace(
 		terminalinput.ReadInput("Choose the message\n\r-> "))
-	messageName, subject, msg_type, body, err := database.MessageGet(message)
+	_, subject, msg_type, body, err := database.MessageGet(message)
 	if err != nil {
+    divider()
 		fmt.Println("ERROR: ", err)
 		return
 	}
-	fmt.Println(messageName, subject, msg_type, body)
+	fmt.Println()
 
+  cmdList_MailingLists()
 	mailing_list := strings.TrimSpace(
 		terminalinput.ReadInput("Choose the mailing list\n\r-> "))
-	mailingListName, list, err := database.MailingListGet(mailing_list)
+	_, list, err := database.MailingListGet(mailing_list)
 	if err != nil {
+    divider()
 		fmt.Println("ERROR: ", err)
 		return
 	}
-	fmt.Println(mailingListName, list)
+	fmt.Println()
+  divider()
 
 	// get account, message and mailing list, then call SendWithPassword()
 	email := sender.Email{
@@ -89,78 +118,11 @@ func cmdSend_oauth() {
 		Oauth:    access,
 		// Message
 		From:         account,
-		Mailing_List: list,
+		MailingList: list,
 		Subject:      subject,
 		Body:         body,
-		Msg_Type:     msg_type,
+		MsgType:     msg_type,
 	}
 	sender.SendEmailOAuth(email)
 }
 
-func cmdSend() {
-
-	sendCmd := flag.NewFlagSet("send", flag.ExitOnError)
-	recipients := sendCmd.String("r", "Recipients list", "Path to the recipients .csv file.")
-	auth := sendCmd.String("a", "Default Body", "Credentials added by using \"sbes auth\"")
-	message := sendCmd.String("m", "Default Body", "Message to be send. Either .txt for plaintext or .html")
-	sendCmd.Parse(os.Args[2:])
-
-	err := handleCmdSend(*recipients, *auth, *message)
-	if err != nil {
-		fmt.Println("ERROR: ", err)
-	}
-}
-
-func handleCmdSend(recipients, auth, message string) error {
-	// Db, err := openDatabase()
-	// account, exists := Db.Accounts[auth]
-	// if exists != true {
-	//   return errors.New("ERROR: No account found")
-	// }
-
-	// Parses recipients list
-	csvFile, err := os.Open(recipients)
-	if err != nil {
-		return err
-	}
-	defer csvFile.Close()
-
-	reader := csv.NewReader(csvFile)
-	var data []string
-
-	for {
-		record, err := reader.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return errors.New("ERROR: EOF")
-		}
-
-		// Check if the specified column exists in the record
-		if 0 < len(record) {
-			data = append(data, record[0])
-		} else {
-			return errors.New("ERROR: column")
-		}
-	}
-
-	data = data[1:]
-
-	// second username is from field
-	// err = SendEmails(
-	//   account.SmtpHost,
-	//   account.SmtpPort,
-	//   "username",
-	//   account.Password,
-	//   account.Username,
-	//   data,
-	//   "testing",
-	//   message)
-	// if err != nil {
-	//   return err
-	// }
-
-	fmt.Println("Email sent successfully!")
-	return nil
-}

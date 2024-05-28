@@ -3,15 +3,24 @@ package repl
 import (
 	"os"
 	"strings"
+  "fmt"
 )
 
+// Starts the repl
 func Start() {
+  // Checks if there is more than one arg
 	if len(os.Args) == 1 {
 		cmdHelp()
 		return
 	}
+
+  // Formats the cmd
 	cmd := strings.ToLower(os.Args[1])
+
+  // Searches for inserted cmd, kinda self explantory
 	switch cmd {
+  case "refresh":
+    cmdRefreshAccessToken()
 
 	case "add":
 		if len(os.Args) == 2 {
@@ -24,8 +33,8 @@ func Start() {
 			cmdAdd_Account()
 		case "oauth-client":
 			cmdAdd_OAuthClient()
-			// 	case "oauth-token":
-			// 		cmdAdd_OAuthToken()
+	  case "oauth-token":
+      cmdAdd_OAuthRefreshToken()
 		case "mailing-list":
 			cmdAdd_MailingList()
 		case "message":
@@ -45,8 +54,6 @@ func Start() {
 			cmdList_Accounts()
 		case "oauth-client":
 			cmdList_OAuthClients()
-		// case "oauth-token":
-		//   cmdList_OAuthTokens()
 		case "mailing-list":
 			cmdList_MailingLists()
 		case "message":
@@ -66,8 +73,6 @@ func Start() {
 			cmdDelete_Account()
 		case "oauth-client":
 			cmdDelete_OAuthClient()
-		// case "oauth-token":
-		//   cmdDelete_OAuthToken()
 		case "mailing-list":
 			cmdDelete_MailingList()
 		case "message":
@@ -114,4 +119,8 @@ func Start() {
 	default:
 		cmdHelp()
 	}
+}
+
+func divider() {
+  fmt.Println("───────────────────────────────────────────────────────────────────────────")
 }

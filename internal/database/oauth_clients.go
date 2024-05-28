@@ -1,3 +1,5 @@
+// Functions to manupulate the oauth clients inside the database
+
 package database
 
 import (
@@ -6,19 +8,24 @@ import (
 )
 
 func OAuthClientAdd(name, client_id, client_secret string) error {
+  // Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
+  // Checks if the item is present
 	if _, exists := Db.OAuthClients[name]; exists != false {
 		return errors.New("OAuth client already present. Delete it first.")
 	}
+
+  // Adds the item
 	Db.OAuthClients[name] = OAuthClient{
 		ClientId:     client_id,
 		ClientSecret: client_secret,
 	}
 
+  // Closes database
 	err = writeDatabase(Db)
 	if err != nil {
 		return err
@@ -27,13 +34,16 @@ func OAuthClientAdd(name, client_id, client_secret string) error {
 }
 
 func OAuthClientDelete(name string) error {
+  // Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
+  // Deletes the item
 	delete(Db.OAuthClients, name)
 
+  // Closes database
 	err = writeDatabase(Db)
 	if err != nil {
 		return err
@@ -41,43 +51,39 @@ func OAuthClientDelete(name string) error {
 	return nil
 }
 
-func OAuthClientFind(name string) (string, string, error) {
-	Db, err := openDatabase()
-	if err != nil {
-		return "", "", err
-	}
-
-	if _, exists := Db.OAuthClients[name]; exists != true {
-		return "", "", errors.New("OAuth does not exist.")
-	}
-
-	return Db.OAuthClients[name].ClientId, Db.OAuthClients[name].ClientSecret, nil
-}
-
 func OAuthClientsList() error {
+  // Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
+  // Prints header
 	fmt.Printf(
 		"%-20v %-26v %-28v\n",
 		"NAME", "ID", "SECRET")
 
+  // Cycles through every item
 	for name, val := range Db.OAuthClients {
+    // Truncates name if > 19
 		truncName := name
 		if len(truncName) > 19 {
 			truncName = truncName[:19]
 		}
+
+    // Truncates id if > 25
 		truncId := val.ClientId
 		if len(truncId) > 25 {
 			truncId = truncId[:25]
 		}
+    
+    // Truncates secret if > 27
 		truncSecret := val.ClientSecret
 		if len(truncSecret) > 27 {
 			truncSecret = truncSecret[:27]
 		}
 
+    // Prints row
 		fmt.Printf(
 			"%-20v %-26v %-28v\n",
 			truncName, truncId, truncSecret)
@@ -86,16 +92,18 @@ func OAuthClientsList() error {
 }
 
 func OauthClientGet(name string) (string, string, error) {
-	// name, subject, msg_type, body
+  // Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return "", "", errors.New("Record does not exist")
 	}
 
+  // Checks if the record exists
 	val, exists := Db.OAuthClients[name]
 	if exists != true {
 		return "", "", errors.New("Record does not exist")
 	}
 
+  // Returns id and secret
 	return val.ClientId, val.ClientSecret, nil
 }
