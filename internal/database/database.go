@@ -5,7 +5,7 @@ package database
 import (
 	"encoding/json"
 	"os"
-  "path/filepath"
+	"path/filepath"
 )
 
 type Account struct {
@@ -61,13 +61,13 @@ func openDatabase() (Database, error) {
 		return Database{}, err
 	}
 
-  // Clean the input path
-  cleanPath := filepath.Clean(fileName)
+	// Clean the input path
+	cleanPath := filepath.Clean(fileName)
 
-  baseDir := "/your/base/directory"  // Change to your base directory
-  if !filepath.IsAbs(cleanPath) {
-    cleanPath = filepath.Join(baseDir, cleanPath)
-  }
+	baseDir := "/your/base/directory" // Change to your base directory
+	if !filepath.IsAbs(cleanPath) {
+		cleanPath = filepath.Join(baseDir, cleanPath)
+	}
 
 	// Tests if the file is present
 	if _, err := os.Stat(cleanPath); os.IsNotExist(err) {

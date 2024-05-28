@@ -98,7 +98,7 @@ func cmdAdd_MailingList() {
 	divider()
 	name := strings.TrimSpace(
 		terminalinput.ReadInput("Enter name for mailing list\n\r-> "))
-    id, _, _ := database.MailingListGet(name)
+	id, _, _ := database.MailingListGet(name)
 	if id != "" {
 		fmt.Println("ERROR: Email list already present with this name.")
 		return
@@ -140,7 +140,7 @@ func cmdAdd_Message() {
 	divider()
 	name := strings.TrimSpace(
 		terminalinput.ReadInput("Enter a name\n\r-> "))
-    id, _, _, _, _ := database.MessageGet(name)
+	id, _, _, _, _ := database.MessageGet(name)
 	if id != "" {
 		fmt.Println("ERROR: Message with this name is already present.")
 		return

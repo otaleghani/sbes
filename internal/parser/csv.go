@@ -6,18 +6,18 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
-  "path/filepath"
 )
 
 func Csv(path string, columnNumber int) ([]string, error) {
-  // Clean the input path
-  cleanPath := filepath.Clean(path)
+	// Clean the input path
+	cleanPath := filepath.Clean(path)
 
-  baseDir := "/your/base/directory"  // Change to your base directory
-  if !filepath.IsAbs(cleanPath) {
-    cleanPath = filepath.Join(baseDir, cleanPath)
-  }
+	baseDir := "/your/base/directory" // Change to your base directory
+	if !filepath.IsAbs(cleanPath) {
+		cleanPath = filepath.Join(baseDir, cleanPath)
+	}
 
 	// Opens file at given path
 	file, err := os.Open(cleanPath)

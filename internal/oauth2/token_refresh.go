@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-  "time"
+	"time"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -44,16 +44,16 @@ func GetOauth2(id, secret string) (string, string) {
 	http.HandleFunc("/oauth2callback", handleOAuth2Callback)
 
 	// Start the web server in a new goroutine.
-  srv := &http.Server{
-      Addr: ":8080",
-      Handler: nil,
-      ReadTimeout: 5 * time.Second,
-      WriteTimeout: 10 * time.Second,
-      IdleTimeout: 15 * time.Second,
-  }
+	srv := &http.Server{
+		Addr:         ":8080",
+		Handler:      nil,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  15 * time.Second,
+	}
 	go func() {
 		fmt.Println("Visit the URL for the auth dialog: http://localhost:8080")
-    log.Fatal(srv.ListenAndServe())
+		log.Fatal(srv.ListenAndServe())
 		//log.Fatal(http.ListenAndServe(":8080", nil))
 	}()
 

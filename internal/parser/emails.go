@@ -10,13 +10,13 @@ import (
 )
 
 func Email(path string) (string, string, error) {
-  // Clean the input path
-  cleanPath := filepath.Clean(path)
+	// Clean the input path
+	cleanPath := filepath.Clean(path)
 
-  baseDir := "/your/base/directory"  // Change to your base directory
-  if !filepath.IsAbs(cleanPath) {
-    cleanPath = filepath.Join(baseDir, cleanPath)
-  }
+	baseDir := "/your/base/directory" // Change to your base directory
+	if !filepath.IsAbs(cleanPath) {
+		cleanPath = filepath.Join(baseDir, cleanPath)
+	}
 
 	// Takes extension of file in given path
 	extension := filepath.Ext(cleanPath)

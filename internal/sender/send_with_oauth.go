@@ -12,9 +12,9 @@ func SendEmailOAuth(email Email) {
 	fmt.Printf("INFO: Trying connection to %v on port %v\n", email.SmtpHost, email.SmtpPort)
 	d := gomail.NewDialer(email.SmtpHost, email.SmtpPort, email.Username, email.Password)
 	d.TLSConfig = &tls.Config{
-    MinVersion: tls.VersionTLS12,
-    ServerName: email.SmtpHost,
-  }
+		MinVersion: tls.VersionTLS12,
+		ServerName: email.SmtpHost,
+	}
 	d.Auth = oauth2.NewOauth2Authenticator(email.Username, email.Oauth)
 	s, err := d.Dial()
 	if err != nil {

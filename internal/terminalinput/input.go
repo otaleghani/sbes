@@ -37,10 +37,10 @@ func EnableRawMode() {
 // DisableRawMode restores the terminal to its original state.
 func DisableRawMode() {
 	fd := int(os.Stdin.Fd())
-  err := term.Restore(fd, originalState)
-  if err != nil {
-    fmt.Println("ERROR: restoring original terminal state")
-  }
+	err := term.Restore(fd, originalState)
+	if err != nil {
+		fmt.Println("ERROR: restoring original terminal state")
+	}
 }
 
 // ReadInput reads input from the terminal with real-time backspace
