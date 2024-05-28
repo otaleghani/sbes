@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+  "time"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -21,11 +22,11 @@ var (
 		Scopes:      []string{"https://mail.google.com/"},
 		Endpoint:    google.Endpoint,
 	}
-  // State token to protect against CSRF
-  oauthStateString = "state-token"            
+	// State token to protect against CSRF
+	oauthStateString = "state-token"
 
-  // Channel to receive OAuth2 tokens
-  tokenChan        = make(chan *oauth2.Token) 
+	// Channel to receive OAuth2 tokens
+	tokenChan = make(chan *oauth2.Token)
 )
 
 // GetOauth initializes the OAuth2 configuration with provided client
@@ -37,15 +38,23 @@ func GetOauth2(id, secret string) (string, string) {
 	oauthConfig.ClientID = id
 	oauthConfig.ClientSecret = secret
 
-  // Set up HTTP handlers for the root and the OAuth2 callback
-  // endpoint.
+	// Set up HTTP handlers for the root and the OAuth2 callback
+	// endpoint.
 	http.HandleFunc("/", handleMain)
 	http.HandleFunc("/oauth2callback", handleOAuth2Callback)
 
 	// Start the web server in a new goroutine.
+  srv := &http.Server{
+      Addr: ":8080",
+      Handler: nil,
+      ReadTimeout: 5 * time.Second,
+      WriteTimeout: 10 * time.Second,
+      IdleTimeout: 15 * time.Second,
+  }
 	go func() {
 		fmt.Println("Visit the URL for the auth dialog: http://localhost:8080")
-		log.Fatal(http.ListenAndServe(":8080", nil))
+    log.Fatal(srv.ListenAndServe())
+		//log.Fatal(http.ListenAndServe(":8080", nil))
 	}()
 
 	// Wait for the token to be received on the token channel.
@@ -59,9 +68,9 @@ func GetOauth2(id, secret string) (string, string) {
 // handleMain redirects the user to the Google OAuth2 authorization
 // URL.
 func handleMain(w http.ResponseWriter, r *http.Request) {
-  // Generate the URL for the OAuth2 authorization request.
+	// Generate the URL for the OAuth2 authorization request.
 	url := oauthConfig.AuthCodeURL(oauthStateString, oauth2.AccessTypeOffline)
-  // Redirect the user to the authorization URL.
+	// Redirect the user to the authorization URL.
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 

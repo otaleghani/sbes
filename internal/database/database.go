@@ -5,6 +5,7 @@ package database
 import (
 	"encoding/json"
 	"os"
+  "path/filepath"
 )
 
 type Account struct {
@@ -39,43 +40,51 @@ type Database struct {
 }
 
 func databasePath() (string, string, error) {
-  // Finds home directory
+	// Finds home directory
 	homePath, err := os.UserHomeDir()
 	if err != nil {
 		return "", "", err
 	}
 
-  // Creates $HOME/.cache.sbes/ and $HOME/.cache.sbes/db.json
+	// Creates $HOME/.cache.sbes/ and $HOME/.cache.sbes/db.json
 	path := homePath + "/.cache/sbes/"
 	fileName := path + "db.json"
 
-  // Returns path and filename
+	// Returns path and filename
 	return path, fileName, nil
 }
 
 func openDatabase() (Database, error) {
-  // Takes path and file name
+	// Takes path and file name
 	path, fileName, err := databasePath()
 	if err != nil {
 		return Database{}, err
 	}
 
+  // Clean the input path
+  cleanPath := filepath.Clean(fileName)
+
+  baseDir := "/your/base/directory"  // Change to your base directory
+  if !filepath.IsAbs(cleanPath) {
+    cleanPath = filepath.Join(baseDir, cleanPath)
+  }
+
 	// Tests if the file is present
-	if _, err := os.Stat(fileName); os.IsNotExist(err) {
-    // Creates all the paths
-		err = os.MkdirAll(path, 0755)
+	if _, err := os.Stat(cleanPath); os.IsNotExist(err) {
+		// Creates all the paths
+		err = os.MkdirAll(path, 0750)
 		if err != nil {
 			return Database{}, err
 		}
-    // Touches file
-		err = os.WriteFile(fileName, []byte("{}"), 0666)
+		// Touches file
+		err = os.WriteFile(cleanPath, []byte("{}"), 0600)
 		if err != nil {
 			return Database{}, err
 		}
 	}
 
 	// Parses data from file
-	data, err := os.ReadFile(fileName)
+	data, err := os.ReadFile(cleanPath)
 	if err != nil {
 		return Database{}, err
 	}
@@ -91,25 +100,25 @@ func openDatabase() (Database, error) {
 		return Database{}, err
 	}
 
-  // Returns the database struct
+	// Returns the database struct
 	return Db, nil
 }
 
 func writeDatabase(db Database) error {
-  // Takes path and file name
+	// Takes path and file name
 	_, fileName, err := databasePath()
 	if err != nil {
 		return err
 	}
 
-  // Encodes json
+	// Encodes json
 	encodedData, err := json.Marshal(db)
 	if err != nil {
 		return err
 	}
 
-  // Writes data in file
-	err = os.WriteFile(fileName, encodedData, 0666)
+	// Writes data in file
+	err = os.WriteFile(fileName, encodedData, 0600)
 	if err != nil {
 		return err
 	}

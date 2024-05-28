@@ -10,9 +10,9 @@ type Email struct {
 	Oauth    string
 
 	// Message
-	From         string
+	From        string
 	MailingList []string
-	Subject      string
-	Body         string
+	Subject     string
+	Body        string
 	MsgType     string
 }

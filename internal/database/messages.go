@@ -8,25 +8,25 @@ import (
 )
 
 func MessageAdd(name, subject, msg_type, body string) error {
-  // Opens database
+	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
-  // Checks if the message is already present
-	if _, exists := Db.Messages[name]; exists != false {
-		return errors.New("Message already present.")
+	// Checks if the message is already present
+	if _, exists := Db.Messages[name]; exists {
+		return errors.New("message already present")
 	}
 
-  // Adds the message
+	// Adds the message
 	Db.Messages[name] = Message{
 		Subject: subject,
 		Body:    body,
 		MsgType: msg_type,
 	}
 
-  // Writes database
+	// Writes database
 	err = writeDatabase(Db)
 	if err != nil {
 		return err
@@ -35,16 +35,16 @@ func MessageAdd(name, subject, msg_type, body string) error {
 }
 
 func MessageDelete(name string) error {
-  // Opens database
+	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
-  // Deletes the message
+	// Deletes the message
 	delete(Db.Messages, name)
 
-  // Writes database
+	// Writes database
 	err = writeDatabase(Db)
 	if err != nil {
 		return err
@@ -53,32 +53,32 @@ func MessageDelete(name string) error {
 }
 
 func MessagesList() error {
-  // Opens database
+	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
-  // Prints data
+	// Prints data
 	fmt.Printf(
 		"%-20v %-47v %6v\n",
 		"NAME", "SUBJECT", "TYPE")
 
-  // Cycles through every item in the db
+	// Cycles through every item in the db
 	for name, val := range Db.Messages {
-    // Truncates the name if > 19
+		// Truncates the name if > 19
 		truncName := name
 		if len(truncName) > 19 {
 			truncName = truncName[:19]
 		}
 
-    // Truncates the subject if > 19
+		// Truncates the subject if > 19
 		truncSubject := val.Subject
 		if len(truncSubject) > 45 {
 			truncSubject = truncSubject[:45]
 		}
 
-    // Prints the row
+		// Prints the row
 		fmt.Printf(
 			"%-20v %-47v %6v\n",
 			truncName, truncSubject, val.MsgType)
@@ -87,18 +87,18 @@ func MessagesList() error {
 }
 
 func MessageGet(name string) (string, string, string, string, error) {
-  // Opens database
+	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return "", "", "", "", nil
 	}
 
-  // Checks if the message is present
+	// Checks if the message is present
 	val, exists := Db.Messages[name]
-	if exists != true {
-		return "", "", "", "", errors.New("Record does not exist")
+	if !exists {
+		return "", "", "", "", errors.New("record does not exist")
 	}
-  
-  // Returns it
+
+	// Returns it
 	return name, val.Subject, val.MsgType, val.Body, nil
 }

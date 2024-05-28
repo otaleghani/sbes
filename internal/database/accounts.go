@@ -8,23 +8,23 @@ import (
 )
 
 func AccountAdd(user, pass, host string, port int) error {
-  // Opens database
+	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
-  // Checks if user already exist
-	if _, exists := Db.Accounts[user]; exists != false {
-		return errors.New("Username already present.")
+	// Checks if user already exist
+	if _, exists := Db.Accounts[user]; exists {
+		return errors.New("username already present")
 	}
 
-  // Adds account
+	// Adds account
 	Db.Accounts[user] = Account{
 		Username: user, Password: pass, SmtpHost: host, SmtpPort: port,
 		RefreshToken: "", AccessToken: ""}
 
-  // Writes database
+	// Writes database
 	err = writeDatabase(Db)
 	if err != nil {
 		return err
@@ -33,16 +33,16 @@ func AccountAdd(user, pass, host string, port int) error {
 }
 
 func AccountDelete(user string) error {
-  // Opens database
+	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
-  // Deletes account
+	// Deletes account
 	delete(Db.Accounts, user)
 
-  // Writes database
+	// Writes database
 	err = writeDatabase(Db)
 	if err != nil {
 		return err
@@ -51,13 +51,13 @@ func AccountDelete(user string) error {
 }
 
 func AccountsList() error {
-  // Opens database
+	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
-  // Prints accounts
+	// Prints accounts
 	fmt.Printf(
 		"%-30v %-30v %6v %6v\n",
 		"USERNAME", "HOST", "PORT", "OAUTH")
@@ -82,42 +82,42 @@ func AccountsList() error {
 }
 
 func AccountGet(user string) (string, string, string, string, string, int, error) {
-  // Opens database
+	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return "", "", "", "", "", 0, nil
 	}
 
-  // Checks if record exists
+	// Checks if record exists
 	val, exists := Db.Accounts[user]
-	if exists != true {
-		return "", "", "", "", "", 0, errors.New("Record does not exist")
+	if !exists {
+		return "", "", "", "", "", 0, errors.New("record does not exist")
 	}
 
-  // Returns values of account
+	// Returns values of account
 	return val.Username, val.Password, val.SmtpHost, val.RefreshToken, val.AccessToken, val.SmtpPort, nil
 }
 
 func AccountTokenAdd(user, refreshToken, accessToken string) error {
-  // Opens database
+	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
-  // Checks if record exists
+	// Checks if record exists
 	_, exists := Db.Accounts[user]
-	if exists != true {
-		return errors.New("User not found.")
+	if !exists {
+		return errors.New("user not found")
 	}
 
-  // Adds access and refresh token
+	// Adds access and refresh token
 	account := Db.Accounts[user]
 	account.AccessToken = accessToken
 	account.RefreshToken = refreshToken
 	Db.Accounts[user] = account
 
-  // Writes database
+	// Writes database
 	err = writeDatabase(Db)
 	if err != nil {
 		return err

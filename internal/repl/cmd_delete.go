@@ -9,13 +9,13 @@ import (
 )
 
 func cmdDelete_Account() {
-  // Propts the user to select an account
-  cmdList_Accounts()
+	// Propts the user to select an account
+	cmdList_Accounts()
 	user := strings.TrimSpace(
 		terminalinput.ReadInput("Enter username that you want to delete\n\r-> "))
-  divider()
+	divider()
 
-  // Tries to delete said account
+	// Tries to delete said account
 	if err := database.AccountDelete(user); err != nil {
 		fmt.Println("ERROR: ", err)
 		return
@@ -24,13 +24,13 @@ func cmdDelete_Account() {
 }
 
 func cmdDelete_OAuthClient() {
-  // Propts the user to select an OAuth Client
-  cmdList_OAuthClients()
+	// Propts the user to select an OAuth Client
+	cmdList_OAuthClients()
 	name := strings.TrimSpace(
 		terminalinput.ReadInput("Enter name of OAuthClient that you want to delete\n\r-> "))
-  divider()
+	divider()
 
-  // Tries to delete said Oauth Client
+	// Tries to delete said Oauth Client
 	if err := database.OAuthClientDelete(name); err != nil {
 		fmt.Println("ERROR: ", err)
 		return
@@ -39,13 +39,13 @@ func cmdDelete_OAuthClient() {
 }
 
 func cmdDelete_MailingList() {
-  // Propts the user to select an mailing list
-  cmdList_MailingLists()
+	// Propts the user to select an mailing list
+	cmdList_MailingLists()
 	name := strings.TrimSpace(
 		terminalinput.ReadInput("Enter name of mailing list that you want to delete\n\r-> "))
-  divider()
+	divider()
 
-  // Tries to delete said account
+	// Tries to delete said account
 	if err := database.MailingListDelete(name); err != nil {
 		fmt.Println("ERROR: ", err)
 		return
@@ -54,13 +54,13 @@ func cmdDelete_MailingList() {
 }
 
 func cmdDelete_Message() {
-  // Propts the user to select a message
-  cmdList_Messages()
+	// Propts the user to select a message
+	cmdList_Messages()
 	name := strings.TrimSpace(
 		terminalinput.ReadInput("Enter name of message that you want to delete\n\r-> "))
-  divider()
+	divider()
 
-  // Tries to delete said message
+	// Tries to delete said message
 	if err := database.MessageDelete(name); err != nil {
 		fmt.Println("ERROR: ", err)
 		return

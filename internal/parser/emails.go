@@ -10,20 +10,28 @@ import (
 )
 
 func Email(path string) (string, string, error) {
-  // Takes extension of file in given path
-	extension := filepath.Ext(path)
+  // Clean the input path
+  cleanPath := filepath.Clean(path)
 
-  // Checks if .html or .txt
+  baseDir := "/your/base/directory"  // Change to your base directory
+  if !filepath.IsAbs(cleanPath) {
+    cleanPath = filepath.Join(baseDir, cleanPath)
+  }
+
+	// Takes extension of file in given path
+	extension := filepath.Ext(cleanPath)
+
+	// Checks if .html or .txt
 	if extension != ".html" && extension != ".txt" {
-		return "", "", errors.New("The file must be .html or .txt")
+		return "", "", errors.New("the file must be .html or .txt")
 	}
 
-  // Reads file
-	file, err := os.ReadFile(path)
+	// Reads file
+	file, err := os.ReadFile(cleanPath)
 	if err != nil {
 		return "", "", err
 	}
 
-  // Returns string
+	// Returns string
 	return string(file), extension, nil
 }

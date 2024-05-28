@@ -15,28 +15,28 @@ import (
 )
 
 func cmdAdd_Account() {
-  // Gets name of user, checks if already present
-  divider()
+	// Gets name of user, checks if already present
+	divider()
 	user := strings.TrimSpace(
 		terminalinput.ReadInput("Enter the username\n\r-> "))
-	username, _, _, _, _, _, err := database.AccountGet(user)
+	username, _, _, _, _, _, _ := database.AccountGet(user)
 	if username != "" {
 		fmt.Println("ERROR: User already present")
 		return
 	}
-  divider()
+	divider()
 
-  // Gets password
+	// Gets password
 	pass := strings.TrimSpace(
 		terminalinput.ReadInput("Enter the password\n\r-> "))
-  divider()
+	divider()
 
-  // Gets hostname
+	// Gets hostname
 	host := strings.TrimSpace(
 		terminalinput.ReadInput("Enter the hostname\n\r-> "))
-  divider()
+	divider()
 
-  // Gets port, converting it in a int
+	// Gets port, converting it in a int
 	port, err := strconv.Atoi(
 		strings.TrimSpace(
 			terminalinput.ReadInput("Enter the port\n\r-> ")))
@@ -44,7 +44,7 @@ func cmdAdd_Account() {
 		fmt.Println("ERROR: ", err)
 		return
 	}
-  divider()
+	divider()
 
 	// Tests connection with server
 	fmt.Println("LOG: Testing connection...")
@@ -55,7 +55,7 @@ func cmdAdd_Account() {
 	}
 	fmt.Println("SUCCESS: Connection successful")
 
-  // Saves data inside of the database
+	// Saves data inside of the database
 	fmt.Println("LOG: Saving data to local database")
 	if err := database.AccountAdd(user, pass, host, port); err != nil {
 		fmt.Println("ERROR: ", err)
@@ -65,70 +65,69 @@ func cmdAdd_Account() {
 }
 
 func cmdAdd_OAuthClient() {
-  // Gets name of OAuth Client to add, checks if already present
-  divider()
+	// Gets name of OAuth Client to add, checks if already present
+	divider()
 	name := strings.TrimSpace(
 		terminalinput.ReadInput("Enter a name for this OAuth Client\n\r-> "))
-	id, _, err := database.OauthClientGet(user)
-	if id != "" {
+	dbName, _, _ := database.OauthClientGet(name)
+	if dbName != "" {
 		fmt.Println("ERROR: An OAuth Client is already present with this name")
 		return
 	}
-  divider()
-  
-  // Gets id
+	divider()
+
+	// Gets id
 	id := strings.TrimSpace(
 		terminalinput.ReadInput("Enter OAuth Client Id\n\r-> "))
-  divider()
+	divider()
 
-  // Gets secret
+	// Gets secret
 	secret := strings.TrimSpace(
 		terminalinput.ReadInput("Enter OAuth Client Secret\n\r-> "))
-  divider()
+	divider()
 
-  // Adds OAuth to database
+	// Adds OAuth to database
 	if err := database.OAuthClientAdd(name, id, secret); err != nil {
 		fmt.Println("ERROR: ", err)
 	}
 	fmt.Println("SUCCESS: OAuth Client saved")
 }
 
-
 func cmdAdd_MailingList() {
-  // Gets name, checks if already present
-  divider()
+	// Gets name, checks if already present
+	divider()
 	name := strings.TrimSpace(
 		terminalinput.ReadInput("Enter name for mailing list\n\r-> "))
-	id, _, err := database.MailingListGet(name)
+    id, _, _ := database.MailingListGet(name)
 	if id != "" {
 		fmt.Println("ERROR: Email list already present with this name.")
-    return
-  }
-  divider()
+		return
+	}
+	divider()
 
-  // Gets file path
+	// Gets file path
 	filePath := strings.TrimSpace(
 		terminalinput.ReadInput("Enter filepath\n\r-> "))
-  divider()
+	divider()
 
-  // Gets column to scan, convers it to int
+	// Gets column to scan, convers it to int
 	column, err := strconv.Atoi(
 		strings.TrimSpace(
 			terminalinput.ReadInput("Enter column of csv containing the email addresses\n\r-> ")))
-  divider()
+	divider()
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 		return
 	}
 
-  // Calls parser to parse the Csv
+	// Calls parser to parse the Csv
 	list, err := parser.Csv(filePath, column)
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 		return
 	}
 
-  // Writes data the database
+	// Writes data the database
 	if err := database.MailingListAdd(name, list); err != nil {
 		fmt.Println("ERROR: ", err)
 		return
@@ -137,79 +136,78 @@ func cmdAdd_MailingList() {
 }
 
 func cmdAdd_Message() {
-  // Adds name of message, checks if already exists
-  divider()
+	// Adds name of message, checks if already exists
+	divider()
 	name := strings.TrimSpace(
 		terminalinput.ReadInput("Enter a name\n\r-> "))
-	id, _, _, _, err := database.MessageGet(name)
+    id, _, _, _, _ := database.MessageGet(name)
 	if id != "" {
 		fmt.Println("ERROR: Message with this name is already present.")
-    return
-  }
-  divider()
+		return
+	}
+	divider()
 
-  // Gets subject of email
+	// Gets subject of email
 	subject := strings.TrimSpace(
 		terminalinput.ReadInput("Enter a subject for this message\n\r-> "))
-  divider()
+	divider()
 
-  // Gets filepath of file
+	// Gets filepath of file
 	filePath := strings.TrimSpace(
 		terminalinput.ReadInput("Enter the message. Either .html or .txt\n\r-> "))
-  divider()
+	divider()
 
-  // Calls parser for that filepath
+	// Calls parser for that filepath
 	message, msg_type, err := parser.Email(filePath)
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 		return
 	}
 
-  // Adds message to database
+	// Adds message to database
 	if err := database.MessageAdd(name, subject, msg_type, message); err != nil {
 		fmt.Println("ERROR: ", err)
 		return
 	}
-  fmt.Println("SUCCESS: Message added to database.")
+	fmt.Println("SUCCESS: Message added to database.")
 }
 
-
 func cmdAdd_OAuthRefreshToken() {
-  // Propts the user to select a user
-  cmdList_Accounts()
+	// Propts the user to select a user
+	cmdList_Accounts()
 	user := strings.TrimSpace(
 		terminalinput.ReadInput("Account username\n\r-> "))
 	username, _, _, _, _, _, err := database.AccountGet(user)
 	if err != nil {
-    divider()
+		divider()
 		fmt.Println("ERROR: ", err)
 		return
 	}
-  fmt.Println()
+	fmt.Println()
 
-  // Propts the user to select a OAuth Client
-  cmdList_OAuthClients()
+	// Propts the user to select a OAuth Client
+	cmdList_OAuthClients()
 	nameClient := strings.TrimSpace(
 		terminalinput.ReadInput("Client to generate token\n\r-> "))
 	id, secret, err := database.OauthClientGet(nameClient)
 	if err != nil {
-    divider()
+		divider()
 		fmt.Println("ERROR: ", err)
 		return
 	}
-  fmt.Println()
+	fmt.Println()
 
-  // Gets refresh and access token
+	// Gets refresh and access token
 	refreshToken, accessToken := oauth2.GetOauth2(id, secret)
 	if refreshToken == "" {
-    divider()
+		divider()
 		fmt.Println("ERROR: Token not generated. Check you client credentials.")
 		return
 	}
 
-  // Writes changes to selected user
+	// Writes changes to selected user
 	if err := database.AccountTokenAdd(username, refreshToken, accessToken); err != nil {
-    divider()
+		divider()
 		fmt.Println("ERROR: ", err)
 		return
 	}
@@ -218,8 +216,8 @@ func cmdAdd_OAuthRefreshToken() {
 
 // Refreshes the access token
 func cmdRefreshAccessToken() {
-  // Propts the user to select a user
-  cmdList_Accounts()
+	// Propts the user to select a user
+	cmdList_Accounts()
 	account := strings.TrimSpace(
 		terminalinput.ReadInput("Choose the account\n\r-> "))
 	user, _, _, refresh, _, _, err := database.AccountGet(account)
@@ -227,28 +225,28 @@ func cmdRefreshAccessToken() {
 		fmt.Println("ERROR: ", err)
 		return
 	}
-  fmt.Println()
+	fmt.Println()
 
-  // Prompts the user to select a OAuth Client
-  cmdList_OAuthClients()
-  client := strings.TrimSpace(
+	// Prompts the user to select a OAuth Client
+	cmdList_OAuthClients()
+	client := strings.TrimSpace(
 		terminalinput.ReadInput("What client do you want to use?\n\r-> "))
 	id, secret, err := database.OauthClientGet(client)
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 		return
 	}
-  divider()
+	divider()
 
-  // Gets new Access token
-  access, err := oauth2.GetAccessToken(id, secret, refresh)
+	// Gets new Access token
+	access, err := oauth2.GetAccessToken(id, secret, refresh)
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 		return
 	}
 
-  // Saves it to database
-  err = database.AccountTokenAdd(user, refresh, access)
+	// Saves it to database
+	err = database.AccountTokenAdd(user, refresh, access)
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 		return
