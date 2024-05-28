@@ -1,5 +1,6 @@
 # sbes
 [![Go Report Card](https://goreportcard.com/badge/github.com/otaleghani/sbes)](https://goreportcard.com/report/github.com/otaleghani/sbes)
+![Ci tests](https://github.com/otaleghani/sbes/actions/workflows/tests.yml/badge.svg)
 
 Simple bulk email sender. A command line utility to send bulk email to your mailing lists right in your terminal.
 
@@ -13,7 +14,7 @@ To get started, add a new account with `add account`. It will ask for your usern
 sbes add account
 ```
 
-You can then add a new OAuth2 token for your account. This is optional, but it's required with some email providers, like Gmail. You will need to generate from Google Cloud a new project and get the OAuth2 Client Id and Secret. You can find a more in-depth explaination at [How to setup OAuth2](#How to setup OAuth2).
+You can then add a new OAuth2 token for your account. This is optional, but it's required with some email providers, like Gmail. You will need to generate from Google Cloud a new project and get the OAuth2 Client Id and Secret. You can find a more in-depth explaination at ![How to setup OAuth2](#How to setup OAuth2).
 
 ```  bash
 sbes add oauth-client
