@@ -37,6 +37,7 @@ func SendEmailOAuth(email Email) {
 		if email.MsgType == ".txt" {
 			m.SetBody("text/plain", email.Body)
 		} else {
+
 			m.SetBody("text/html", email.Body)
 		}
 
