@@ -44,3 +44,13 @@ func cmdList_Messages() {
 	}
 	divider()
 }
+
+func cmdList_Campaigns() {
+	// Calls function to list all messages
+	divider()
+	if err := database.CampaignsList(); err != nil {
+		fmt.Println("ERROR: ", err)
+		return
+	}
+	divider()
+}

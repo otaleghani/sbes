@@ -98,12 +98,11 @@ When the Refresh token runs out (every 7 days), you will need to call the `sbes 
 ## Planning for future versions
 
 ### 0.1.1
-    tdb
+- [ ] Trackers 
 
 ### Features to add
 - [ ] Encrypt local sensitive data
 - [ ] Add other APIs, like Microsoft Graph API
-- [ ] Trackers 
 
 #### Trackers brainstorming
 Requires a running process that serves a resource like an image. Could do something like `sbes send...` ask then for a name and then create with that name a hittable resource (like an image) and then make it available to the recipients. This image is then inserted inside of every html email with a parameter (like the email).
@@ -119,3 +118,4 @@ Then whenever that image is hit it has this arg that contain the email address o
 ``` bash
 sbes track
 ```
+

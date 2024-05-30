@@ -18,12 +18,12 @@ func Test_Paths(t *testing.T) {
 }
 
 func Test_Campaigns(t *testing.T) {
-  // err := CampaignAdd("sandro3", "o.taleghani@talesign.com", "test", "test")
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
+  err := CampaignAdd("sandro", "o.taleghani@talesign.com", "test", "test")
+	if err != nil {
+		t.Fatal(err)
+	}
 
-  err := CampaignDelete("sandro3")
+  err = CampaignDelete("sandro3")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -40,7 +40,7 @@ func Test_Campaigns(t *testing.T) {
 		t.Fatal(err)
 	}
 
-  err = CampaignList()
+  err = CampaignsList()
 	if err != nil {
 		t.Fatal(err)
 	}

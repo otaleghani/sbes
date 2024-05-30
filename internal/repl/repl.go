@@ -58,6 +58,8 @@ func Start() {
 			cmdList_MailingLists()
 		case "message":
 			cmdList_Messages()
+		case "campaign":
+			cmdList_Campaigns()
 		default:
 			cmdHelp()
 		}

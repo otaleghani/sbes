@@ -130,7 +130,7 @@ func CampaignDelete(campaignName string) error {
 
 // func CampaignGet() {}
 
-func CampaignList() error {
+func CampaignsList() error {
 	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
