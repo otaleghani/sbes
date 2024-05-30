@@ -19,7 +19,10 @@ func MailingListAdd(name string, list []string) error {
 	if _, exists := Db.MailingLists[name]; exists {
 		return errors.New("mailing list already present")
 	}
-	Db.MailingLists[name] = MailingList{List: list}
+	Db.MailingLists[name] = MailingList{
+    Name: name,
+    List: list,
+  }
 
 	// Writes database
 	err = writeDatabase(Db)
@@ -108,4 +111,21 @@ func MailingListGet(name string) (string, []string, error) {
 
 	// Returns name and email list
 	return name, val.List, nil
+}
+
+func MailingListGetObject(name string) (MailingList, error) {
+	// Opens database
+	Db, err := openDatabase()
+	if err != nil {
+		return MailingList{}, nil
+	}
+
+	// Checks if record exists
+	val, exists := Db.MailingLists[name]
+	if !exists {
+		return MailingList{}, errors.New("record does not exist")
+	}
+
+	// Returns values of account
+	return val, nil
 }

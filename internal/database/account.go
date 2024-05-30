@@ -124,3 +124,20 @@ func AccountTokenAdd(user, refreshToken, accessToken string) error {
 	}
 	return nil
 }
+
+func AccountGetObject(user string) (Account, error) {
+	// Opens database
+	Db, err := openDatabase()
+	if err != nil {
+		return Account{}, nil
+	}
+
+	// Checks if record exists
+	val, exists := Db.Accounts[user]
+	if !exists {
+		return Account{}, errors.New("record does not exist")
+	}
+
+	// Returns values of account
+	return val, nil
+}

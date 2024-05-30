@@ -19,8 +19,10 @@ func MessageAdd(name, subject, msg_type, body string) error {
 		return errors.New("message already present")
 	}
 
+
 	// Adds the message
 	Db.Messages[name] = Message{
+    Name:name,
 		Subject: subject,
 		Body:    body,
 		MsgType: msg_type,
@@ -101,4 +103,21 @@ func MessageGet(name string) (string, string, string, string, error) {
 
 	// Returns it
 	return name, val.Subject, val.MsgType, val.Body, nil
+}
+
+func MessageGetObject(msg string) (Message, error) {
+	// Opens database
+	Db, err := openDatabase()
+	if err != nil {
+		return Message{}, nil
+	}
+
+	// Checks if record exists
+	val, exists := Db.Messages[msg]
+	if !exists {
+		return Message{}, errors.New("record does not exist")
+	}
+
+	// Returns values of account
+	return val, nil
 }
