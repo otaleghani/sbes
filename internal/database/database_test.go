@@ -4,7 +4,7 @@ import (
 	// "github.com/otaleghani/spg"
 	"fmt"
 	"testing"
-  "time"
+	"time"
 )
 
 // var gen = spg.New("en-usa")
@@ -18,29 +18,29 @@ func Test_Paths(t *testing.T) {
 }
 
 func Test_Campaigns(t *testing.T) {
-  err := CampaignAdd("sandro", "o.taleghani@talesign.com", "test", "test")
+	err := CampaignAdd("sandro", "o.taleghani@talesign.com", "test", "test")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-  err = CampaignDelete("sandro3")
+	err = CampaignDelete("sandro3")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-  // time := time.Now()
-  // err = TrackedOpenAdd("sandro", "sandro@fortissimo.com", time)
+	// time := time.Now()
+	// err = TrackedOpenAdd("sandro", "sandro@fortissimo.com", time)
 	// if err != nil {
 	// 	t.Fatal(err)
 	// }
 
-  time := time.Now()
-  err = TrackedClickAdd("sandro", "sandro@fortissimo.com", "linkpotente2", time)
+	time := time.Now()
+	err = TrackedClickAdd("sandro", "sandro@fortissimo.com", "linkpotente2", time)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-  err = CampaignsList()
+	err = CampaignsList()
 	if err != nil {
 		t.Fatal(err)
 	}

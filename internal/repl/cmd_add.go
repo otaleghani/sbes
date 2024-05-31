@@ -197,8 +197,25 @@ func cmdAdd_OAuthRefreshToken() {
 	}
 	fmt.Println()
 
+	domain, err := database.DomainOAuthGet()
+	if err != nil {
+		divider()
+		fmt.Println("ERROR: ", err)
+		return
+	}
+	if domain == "" {
+		domain = strings.TrimSpace(
+			terminalinput.ReadInput("Domain not set, specify your oauth domain\n\r-> "))
+		err = database.UpdateDomainOAuth(domain)
+		if err != nil {
+			divider()
+			fmt.Println("ERROR: ", err)
+			return
+		}
+	}
+
 	// Gets refresh and access token
-	refreshToken, accessToken := oauth2.GetOauth2(id, secret)
+	refreshToken, accessToken := oauth2.GetOauth2(id, secret, domain)
 	if refreshToken == "" {
 		divider()
 		fmt.Println("ERROR: Token not generated. Check you client credentials.")

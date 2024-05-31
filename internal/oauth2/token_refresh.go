@@ -18,9 +18,9 @@ import (
 // OAuth2 provider's endpoint.
 var (
 	oauthConfig = &oauth2.Config{
-		RedirectURL: "http://localhost:8080/oauth2callback",
-		Scopes:      []string{"https://mail.google.com/"},
-		Endpoint:    google.Endpoint,
+		// RedirectURL: "http://localhost:8080/oauth2callback",
+		Scopes:   []string{"https://mail.google.com/"},
+		Endpoint: google.Endpoint,
 	}
 	// State token to protect against CSRF
 	oauthStateString = "state-token"
@@ -34,7 +34,8 @@ var (
 // waits for the token to be received through the token channel and
 // returns the access token.
 
-func GetOauth2(id, secret string) (string, string) {
+func GetOauth2(id, secret, domain string) (string, string) {
+	oauthConfig.RedirectURL = "http://" + domain + "/oauth2callback"
 	oauthConfig.ClientID = id
 	oauthConfig.ClientSecret = secret
 

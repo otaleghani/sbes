@@ -24,14 +24,14 @@ type OAuthClient struct {
 }
 
 type Message struct {
-  Name string `json:"name"`
+	Name    string `json:"name"`
 	Subject string `json:"subject"`
 	Body    string `json:"body"`
 	MsgType string `json:"msg_type"` // either plain or html
 }
 
 type MailingList struct {
-  Name string `json:"name"`
+	Name string   `json:"name"`
 	List []string `json:"list"`
 }
 
@@ -47,16 +47,17 @@ type TrackedClick struct {
 }
 
 type Campaign struct {
-	Name          string                  `json:"name"`
-	From          Account                 `json:"from"`
-	Msg           Message                 `json:"msg"`
-	To            MailingList             `json:"to"`
-	TrackedOpens   map[string][]TrackedOpen  `json:"tracked_opens"`
+	Name          string                    `json:"name"`
+	From          Account                   `json:"from"`
+	Msg           Message                   `json:"msg"`
+	To            MailingList               `json:"to"`
+	TrackedOpens  map[string][]TrackedOpen  `json:"tracked_opens"`
 	TrackedClicks map[string][]TrackedClick `json:"tracked_clicks"`
 }
 
 type Database struct {
-  Domain string `json:"domain"`
+	Domain       string                 `json:"domain"`
+	DomainOAuth  string                 `json:"domain-oauth"`
 	Accounts     map[string]Account     `json:"accounts"`
 	OAuthClients map[string]OAuthClient `json:"oauths_clients"`
 	MailingLists map[string]MailingList `json:"mailing_lists"`
@@ -120,7 +121,7 @@ func openDatabase() (Database, error) {
 		OAuthClients: make(map[string]OAuthClient),
 		MailingLists: make(map[string]MailingList),
 		Messages:     make(map[string]Message),
-    Campaigns:    make(map[string]Campaign),
+		Campaigns:    make(map[string]Campaign),
 	}
 	if err = json.Unmarshal(data, &Db); err != nil {
 		return Database{}, err

@@ -4,9 +4,9 @@ import (
 	"crypto/tls"
 	"fmt"
 
-	"gopkg.in/gomail.v2"
 	"github.com/otaleghani/sbes/internal/oauth2"
 	"github.com/otaleghani/sbes/internal/tracker"
+	"gopkg.in/gomail.v2"
 )
 
 func SendEmailOAuth(email Email) {
@@ -39,7 +39,7 @@ func SendEmailOAuth(email Email) {
 		if email.MsgType == ".txt" {
 			m.SetBody("text/plain", email.Body)
 		} else {
-      body := tracker.AddTrackerToEmail(email.Domain, recipient, email.Campaign, email.Body)
+			body := tracker.AddTrackerToEmail(email.Domain, recipient, email.Campaign, email.Body)
 			m.SetBody("text/html", body)
 		}
 

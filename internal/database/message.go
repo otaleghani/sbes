@@ -19,10 +19,9 @@ func MessageAdd(name, subject, msg_type, body string) error {
 		return errors.New("message already present")
 	}
 
-
 	// Adds the message
 	Db.Messages[name] = Message{
-    Name:name,
+		Name:    name,
 		Subject: subject,
 		Body:    body,
 		MsgType: msg_type,

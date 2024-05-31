@@ -1,8 +1,5 @@
 package database
 
-import (
-)
-
 func UpdateDomain(domain string) error {
 	// Opens database
 	Db, err := openDatabase()
@@ -10,7 +7,7 @@ func UpdateDomain(domain string) error {
 		return err
 	}
 
-  Db.Domain = domain
+	Db.Domain = domain
 
 	// Writes database
 	err = writeDatabase(Db)
@@ -28,4 +25,31 @@ func DomainGet() (string, error) {
 	}
 
 	return Db.Domain, nil
+}
+
+func UpdateDomainOAuth(domain string) error {
+	// Opens database
+	Db, err := openDatabase()
+	if err != nil {
+		return err
+	}
+
+	Db.DomainOAuth = domain
+
+	// Writes database
+	err = writeDatabase(Db)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DomainOAuthGet() (string, error) {
+	// Opens database
+	Db, err := openDatabase()
+	if err != nil {
+		return "", err
+	}
+
+	return Db.DomainOAuth, nil
 }

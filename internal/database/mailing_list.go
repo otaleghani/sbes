@@ -20,9 +20,9 @@ func MailingListAdd(name string, list []string) error {
 		return errors.New("mailing list already present")
 	}
 	Db.MailingLists[name] = MailingList{
-    Name: name,
-    List: list,
-  }
+		Name: name,
+		List: list,
+	}
 
 	// Writes database
 	err = writeDatabase(Db)

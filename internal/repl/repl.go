@@ -22,6 +22,12 @@ func Start() {
 	case "refresh":
 		cmdRefreshAccessToken()
 
+	case "update-domain":
+		cmdUpdateDomain()
+
+	case "update-domain-oauth":
+		cmdUpdateDomainOAuth()
+
 	case "add":
 		if len(os.Args) == 2 {
 			cmdHelp()
@@ -118,22 +124,22 @@ func Start() {
 			cmdHelp()
 		}
 
-  case "tracker":
-    if len(os.Args) == 2 {
-      cmdHelp()
-      return
-    }
-    domain := strings.ToLower(os.Args[2])
-    cmdTrackerStart(domain)
-    // switch cmd {
-    // case "start":
-    //   //
-    //   cmdTrackerStart()
-    // case "stop":
-    //   cmdTrackerStop()
-    // default:
-    //   cmdHelp()
-    // }
+	case "tracker":
+		if len(os.Args) == 2 {
+			cmdHelp()
+			return
+		}
+		domain := strings.ToLower(os.Args[2])
+		cmdTrackerStart(domain)
+		// switch cmd {
+		// case "start":
+		//   //
+		//   cmdTrackerStart()
+		// case "stop":
+		//   cmdTrackerStop()
+		// default:
+		//   cmdHelp()
+		// }
 
 	default:
 		cmdHelp()

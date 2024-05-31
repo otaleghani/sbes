@@ -110,39 +110,39 @@ func cmdSend_oauth() {
 
 	campaign := strings.TrimSpace(
 		terminalinput.ReadInput("Choose the name of the campaign\n\r-> "))
-  checkCampaign, _, _, _, _, _, _ := database.CampaignGet(campaign)
-  if checkCampaign != "" {
-    divider()
-    fmt.Println("ERROR: campaign name already present!")
-    return
-  }
-  // create a new campaign
-  err = database.CampaignAdd(campaign, accountName, messageName, mailingListName)
-  if err != nil {
-    fmt.Println("ERROR: ", err)
-    return
-  }
+	checkCampaign, _, _, _, _, _, _ := database.CampaignGet(campaign)
+	if checkCampaign != "" {
+		divider()
+		fmt.Println("ERROR: campaign name already present!")
+		return
+	}
+	// create a new campaign
+	err = database.CampaignAdd(campaign, accountName, messageName, mailingListName)
+	if err != nil {
+		fmt.Println("ERROR: ", err)
+		return
+	}
 
-  domain, err := database.DomainGet()
-  if err != nil {
-    fmt.Println("ERROR: ", err)
-    return
-  }
+	domain, err := database.DomainGet()
+	if err != nil {
+		fmt.Println("ERROR: ", err)
+		return
+	}
 
 	// get account, message and mailing list, then call SendWithPassword()
 	email := sender.Email{
-		SmtpHost: host,
-		SmtpPort: port,
-		Username: account,
-		Password: pass,
-		Oauth:    access,
+		SmtpHost:    host,
+		SmtpPort:    port,
+		Username:    account,
+		Password:    pass,
+		Oauth:       access,
 		From:        account,
 		MailingList: list,
 		Subject:     subject,
 		Body:        body,
 		MsgType:     msg_type,
-    Campaign: campaign,
-    Domain: domain,
+		Campaign:    campaign,
+		Domain:      domain,
 	}
 	sender.SendEmailOAuth(email)
 }
