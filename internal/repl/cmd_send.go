@@ -123,7 +123,7 @@ func cmdSend_oauth() {
 		return
 	}
 
-	domain, err := database.DomainGet()
+	domain, err := database.DomainTrackerGet()
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 		return

@@ -8,7 +8,7 @@ import (
 )
 
 func cmdTrackerStart(domain string) {
-	err := database.UpdateDomain(domain)
+	err := database.UpdateDomainTracker(domain)
 	if err != nil {
 		fmt.Println("ERROR: unable to add the domain")
 		return

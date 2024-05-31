@@ -1,13 +1,13 @@
 package database
 
-func UpdateDomain(domain string) error {
+func UpdateDomainTracker(domain string) error {
 	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return err
 	}
 
-	Db.Domain = domain
+	Db.DomainTracker = domain
 
 	// Writes database
 	err = writeDatabase(Db)
@@ -17,14 +17,14 @@ func UpdateDomain(domain string) error {
 	return nil
 }
 
-func DomainGet() (string, error) {
+func DomainTrackerGet() (string, error) {
 	// Opens database
 	Db, err := openDatabase()
 	if err != nil {
 		return "", err
 	}
 
-	return Db.Domain, nil
+	return Db.DomainTracker, nil
 }
 
 func UpdateDomainOAuth(domain string) error {

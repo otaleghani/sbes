@@ -25,7 +25,7 @@ func cmdUpdateDomain() {
 	divider()
 	domain := strings.TrimSpace(
 		terminalinput.ReadInput("Enter new tracker domain \n\r-> "))
-	err := database.UpdateDomain(domain)
+	err := database.UpdateDomainTracker(domain)
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 		return

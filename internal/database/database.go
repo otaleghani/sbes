@@ -56,7 +56,7 @@ type Campaign struct {
 }
 
 type Database struct {
-	Domain       string                 `json:"domain"`
+	DomainTracker       string                 `json:"domain-tracker"`
 	DomainOAuth  string                 `json:"domain-oauth"`
 	Accounts     map[string]Account     `json:"accounts"`
 	OAuthClients map[string]OAuthClient `json:"oauths_clients"`

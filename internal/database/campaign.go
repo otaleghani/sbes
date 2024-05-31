@@ -161,8 +161,6 @@ func CampaignsList() error {
 	return nil
 }
 
-// func CampaignListOpens(campaignName string) error {}
-// func CampaignListClicks(campaignName string) error {}
 
 func CampaignGet(name string) (
 	string, Account, Message, MailingList, map[string][]TrackedOpen,
