@@ -15,4 +15,6 @@ type Email struct {
 	Subject     string
 	Body        string
 	MsgType     string
+  Campaign string
+  Domain string
 }

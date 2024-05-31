@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+        }
+        .main-content {
+            margin: 20px 0;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section img {
+            width: 100%;
+            height: auto;
+        }
+        .footer {
+            text-align: center;
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+        @media (min-width: 600px) {
+            .section {
+                display: flex;
+                justify-content: space-between;
+            }
+            .section img {
+                width: 45%;
+            }
+            .section .text {
+                width: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Newsletter Title</h1>
+            <a href="https://google.com">A simple link</a>
+        </div>
+
+        <div class="main-content">
+            <div class="section">
+                <div class="text">
+                    <h2>Section 1</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque diam vitae libero facilisis, et dictum neque scelerisque.</p>
+                </div>
+                <img src="https://via.placeholder.com/400x200" alt="Placeholder Image">
+            </div>
+
+            <div class="section">
+                <img src="https://via.placeholder.com/400x200" alt="Placeholder Image">
+                <div class="text">
+                    <h2>Section 2</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque diam vitae libero facilisis, et dictum neque scelerisque.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="text">
+                    <h2>Section 3</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque diam vitae libero facilisis, et dictum neque scelerisque.</p>
+                </div>
+                <img src="https://via.placeholder.com/400x200" alt="Placeholder Image">
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Footer Information | <a href="#" style="color: #fff;">Unsubscribe</a></p>
+        </div>
+    </div>
+</body>
+</html>

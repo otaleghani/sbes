@@ -67,7 +67,7 @@ func cmdSend_oauth() {
 	cmdList_Accounts()
 	account := strings.TrimSpace(
 		terminalinput.ReadInput("Choose the account\n\r-> "))
-	_, pass, host, refresh, access, port, err := database.AccountGet(account)
+	accountName, pass, host, refresh, access, port, err := database.AccountGet(account)
 	if err != nil {
 		divider()
 		fmt.Println("ERROR: ", err)
@@ -88,7 +88,7 @@ func cmdSend_oauth() {
 	cmdList_Messages()
 	message := strings.TrimSpace(
 		terminalinput.ReadInput("Choose the message\n\r-> "))
-	_, subject, msg_type, body, err := database.MessageGet(message)
+	messageName, subject, msg_type, body, err := database.MessageGet(message)
 	if err != nil {
 		divider()
 		fmt.Println("ERROR: ", err)
@@ -99,7 +99,7 @@ func cmdSend_oauth() {
 	cmdList_MailingLists()
 	mailing_list := strings.TrimSpace(
 		terminalinput.ReadInput("Choose the mailing list\n\r-> "))
-	_, list, err := database.MailingListGet(mailing_list)
+	mailingListName, list, err := database.MailingListGet(mailing_list)
 	if err != nil {
 		divider()
 		fmt.Println("ERROR: ", err)
@@ -108,20 +108,41 @@ func cmdSend_oauth() {
 	fmt.Println()
 	divider()
 
+	campaign := strings.TrimSpace(
+		terminalinput.ReadInput("Choose the name of the campaign\n\r-> "))
+  checkCampaign, _, _, _, _, _, _ := database.CampaignGet(campaign)
+  if checkCampaign != "" {
+    divider()
+    fmt.Println("ERROR: campaign name already present!")
+    return
+  }
+  // create a new campaign
+  err = database.CampaignAdd(campaign, accountName, messageName, mailingListName)
+  if err != nil {
+    fmt.Println("ERROR: ", err)
+    return
+  }
+
+  domain, err := database.DomainGet()
+  if err != nil {
+    fmt.Println("ERROR: ", err)
+    return
+  }
+
 	// get account, message and mailing list, then call SendWithPassword()
 	email := sender.Email{
-		// Authentication
 		SmtpHost: host,
 		SmtpPort: port,
 		Username: account,
 		Password: pass,
 		Oauth:    access,
-		// Message
 		From:        account,
 		MailingList: list,
 		Subject:     subject,
 		Body:        body,
 		MsgType:     msg_type,
+    Campaign: campaign,
+    Domain: domain,
 	}
 	sender.SendEmailOAuth(email)
 }

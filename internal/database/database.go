@@ -56,6 +56,7 @@ type Campaign struct {
 }
 
 type Database struct {
+  Domain string `json:"domain"`
 	Accounts     map[string]Account     `json:"accounts"`
 	OAuthClients map[string]OAuthClient `json:"oauths_clients"`
 	MailingLists map[string]MailingList `json:"mailing_lists"`

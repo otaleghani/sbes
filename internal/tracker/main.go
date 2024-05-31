@@ -6,7 +6,6 @@ import (
   "time"
 )
 
-
 func Listen() {
   createTrackerImage()
   http.HandleFunc("/track/open", handleOpenTracker)
@@ -21,6 +20,7 @@ func Listen() {
   }
 
   for {
+    log.Println("Serving tracker on port :8081")
     err := srv.ListenAndServe()
     if err != nil {
       log.Println(err)

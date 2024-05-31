@@ -128,8 +128,6 @@ func CampaignDelete(campaignName string) error {
 	return nil
 }
 
-// func CampaignGet() {}
-
 func CampaignsList() error {
 	// Opens database
 	Db, err := openDatabase()
@@ -167,3 +165,20 @@ func CampaignsList() error {
 // func CampaignListOpens(campaignName string) error {}
 // func CampaignListClicks(campaignName string) error {}
 
+func CampaignGet(name string) (
+  string, Account, Message, MailingList, map[string][]TrackedOpen,
+  map[string][]TrackedClick, error) {
+	// Opens database
+	Db, err := openDatabase()
+	if err != nil {
+		return "", Account{}, Message{}, MailingList{}, nil, nil, err
+	}
+
+	// Checks if record exists
+	val, exists := Db.Campaigns[name]
+	if !exists {
+		return "", Account{}, Message{}, MailingList{}, nil, nil, errors.New("record does not exist")
+	}
+
+  return val.Name, val.From, val.Msg, val.To, val.TrackedOpens, val.TrackedClicks, nil
+}

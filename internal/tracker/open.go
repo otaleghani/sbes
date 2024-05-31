@@ -1,11 +1,14 @@
 package tracker
 
 import (
+  "os"
+  "time"
   "net/http"
   "log"
   "image"
   "image/png"
-  "os"
+
+  "github.com/otaleghani/sbes/internal/database"
 )
 
 func handleOpenTracker(w http.ResponseWriter, r *http.Request) {
@@ -13,7 +16,11 @@ func handleOpenTracker(w http.ResponseWriter, r *http.Request) {
   campaign := r.FormValue("campaign")
   log.Printf("Logged open: %30v opended %30v", email, campaign)
 
-  // Here save result if ok
+  time := time.Now()
+  err := database.TrackedOpenAdd(campaign, email, time)
+  if err != nil {
+    log.Printf("ERROR: unable to save to database entry click of %v in campaign %v", email, campaign)
+  }
 
   http.ServeFile(w, r, "image.png")
 }
